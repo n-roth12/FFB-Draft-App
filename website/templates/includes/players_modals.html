@@ -1,0 +1,62 @@
+<style>
+	.modal-content {
+		background-color: #464646
+	}
+</style>
+
+<div class="modal fade" id="Modal-MoreInfo-{{ player.id }}"
+	tabindex="-1"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="ModalLabel">
+					{{ player.name }}
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>{{ player.name }} is a {{ player.position }} for {{ player.team }}.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="Modal-SwapRank-{{ player.id }}"
+	tabindex="-1"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="ModalLabel">
+					{{ player.rank }}. {{ player.name }}
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="POST">
+					{{ swap_rank_form.hidden_tag()}}
+					<p> 
+						Enter rank of player to swap {{ player.name }} with:
+					</p>
+					{{ swap_rank_form.new_rank(class="form-control", placeholder="New Rank") }}
+					<br>
+					<input id="swapped_player" name="swapped_player" type="hidden" value="{{player.name}}">
+					{{ swap_rank_form.submit(class="btn btn-outline-success btn-block") }}
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+					Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

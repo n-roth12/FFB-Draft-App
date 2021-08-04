@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Rankings Page
+{% endblock %}
+
+{% block content %}
+	<br>
+	<h1 class="text-center">Your {% block h1 %}{% endblock %} Custom Rankings</h1>
+	<br>
+	<div class="text-center row">
+		<p class="col">Filter By Position: <a href="{{ url_for('rankings_page') }}">All</a> | <a href="{{ url_for('qb_rankings_page') }}">QB</a> | <a href="{{ url_for('rb_rankings_page') }}">RB</a> | <a href="{{ url_for('wr_rankings_page') }}">WR</a> | <a href="{{ url_for('te_rankings_page') }}">TE</a> 
+		</p>
+		<!-- Inactive search bar
+		<div class="col" id="search-container">
+			<form action="">
+				<label for="player">Search for a player</label>
+				<input type="text" id="search-player" name="search-player" placeholder="Search:">
+			</form>
+		</div>-->
+	</div>
+	<div class="text-center container">
+		<form method="POST" class="save-changes">
+			<a id="save-changes-btn" style="display: none" onclikc="save_changes" class="btn btn-outline-primary" href="{{ url_for('rankings_page') }}">Save Changes</a>
+		</form>
+	</div>
+	<br>
+	<table class="table table-hover table-striped table-sm table-dark" style="width:60%; margin-left:auto; margin-right:auto;">
+		<thead>
+			<tr>
+				<th scope="col" class="text-center">Rank</th>
+				<th scope="col" class="text-center">Name</th>
+				<th scope="col" class="text-center">Position</th>
+				<th scope="col" class="text-center">Team</th>
+				<th scope="col" class="text-center">ADP</th>
+				<th scope="col" class="text-center">Fantasy Pros</th>
+				<th scope="col" class="text-center">FFB Calculator</th>
+				<th scope="col" class="text-center">Sporting News</th>
+				<th scope="col" class="text-center">Options</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for player in players %}
+			{% include 'includes/players_modals.html' %}
+				<tr class="player-row" id="{{ player.id }}-row">
+					<td class="text-center custom-rank" form="player-form">{{ player.rank }}</td>
+					<td class="text-center">{{ player.name }}</td>
+					<td class="text-center">{{ player.position }}</td>
+					<td class="text-center">{{ player.team }}</td>
+					<td class="text-center">{{ player.rank }}</td>
+					<td class="text-center">{{ player.fp_rank }}</td>
+					<td class="text-center">{{ player.ffb_calc_rank }}</td>
+					<td class="text-center">{{ player.sport_news_rank }}</td>
+					<td class="text-center">
+					<!--
+						<button class="btn btn-outline btn-outline-info btn-sm" data-toggle="modal" data-target="#Modal-MoreInfo-{{ player.id }}">More Info</button>
+						<button id="{{ player.id }}-btn"class="btn btn-outline btn-outline-success btn-sm">Change Ranking</button>-->
+						
+							<button class="btn btn-outline btn-outline-success btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player.id }}">Change Ranking</button>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<script>
+		addListeners();
+
+		var selected_player1;
+		var selected_player2;
+
+		function addListeners() {
+			swap_btns = document.getElementsByClassName('btn btn-outline btn-outline-success btn-sm');
+			for (var i = 0; i < swap_btns.length; i++) {
+				swap_btns[i].addEventListener("click", swap);
+			}
+		}
+		
+		function swap() {
+			for (var i = 0; i < swap_btns.length; i++) {
+				swap_btns[i].innerHTML = "Swap";
+				swap_btns[i].removeEventListener("click", swap);
+				swap_btns[i].addEventListener("click", swap_players);
+				selected_player1 = this.id;
+			}	
+		}
+
+		function swap_players() {
+			for (var i = 0; i < swap_btns.length; i++) {
+				swap_btns[i].innerHTML = "Change Ranking";
+				swap_btns[i].removeEventListener("click", swap_players);
+				swap_btns[i].addEventListener("click", swap);
+				selected_player2 = this.id;
+			}
+			document.getElementById("save-changes-btn").style.display='inline';
+			swap_rows();
+		}
+
+		function swap_rows() {
+			var player1_row_id = selected_player1.substring(0, selected_player1.length-3) + "row";
+			var player2_row_id = selected_player2.substring(0, selected_player2.length-3) + "row";
+			var player1_row = document.getElementById(player1_row_id);
+			var player2_row = document.getElementById(player2_row_id);
+			var temp = player1_row.innerHTML;
+			player1_row.innerHTML = player2_row.innerHTML;
+			player2_row.innerHTML = temp;
+
+			player1_row.id = player2_row_id;
+			player2_row.id = player1_row_id;
+
+			player1_rank = player1_row.getElementsByClassName("text-center custom-rank")[0];
+			player2_rank = player2_row.getElementsByClassName("text-center custom-rank")[0];
+			temp2 = player1_rank.innerHTML
+			player1_rank.innerHTML = player2_rank.innerHTML
+			player2_rank.innerHTML = temp2
+
+			addListeners();
+		}
+
+		function save_changes() {
+
+
+		}
+		/*
+		have the above function send to a new route and then have that be a post request, it 
+		can even redirect back to the same page
+
+		*/
+		/* Inactive search functions
+		var targetInput = document.getElementById("search-player"),
+			playerRows = document.getElementsByClassName("player-row");
+
+		targetInput.addEventListener("keyup", function(event) {
+			if (this.value.length > 0) {
+				matches = getMatches(this.value);
+			}
+			if (matches.length > 0) {
+				displayMatches(matches);
+			}
+		});
+
+		function getMatches(inputText) {
+			var matchList = [];
+			for (var i = 0; i < playerRows.length; i++) {
+				playerName = playerRows[i].getElementsByClassName("player-name")[0];
+				if (playerName.innerHTML.toLowerCase().indexOf(inputText.toLowerCase()) != -1) {
+					matchList.push(playerRows[i]);
+				}
+			}
+			console.log(matchList.length)
+			return matchList;
+		}
+
+		function displayMatches(matchList) {
+			var j = 0;
+			for (var i = 0; i < playerRows.length; i++) {
+				if (playerRows[i] == matchList[j]) {
+					playerRows[i].style.display = "none";
+					j++;
+				} else {
+					playerRows[i].style.display = "block";
+				}
+			}
+		} */
+
+	</script>
+{% endblock %}
+
+
+
+
