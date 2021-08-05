@@ -9,10 +9,11 @@ Register Page
 	<div class="container">
 		<form method="POST" class="form-register" style="color:white">
 			{{ form.hidden_tag() }}
-            <h1 class="h3 mb-3 font-weight-normal">
-                Please Create your Account
-            </h1>
-            <br>
+			<br>
+         <h1 class="h3 mb-3 font-weight-normal">
+             Please Create your Account
+         </h1>
+         <br>
 			{{ form.username.label() }}
 			{{ form.username(class="form-control", placeholder="User Name") }}		<!-- placeholder here determines the text inside the input area -->
 
