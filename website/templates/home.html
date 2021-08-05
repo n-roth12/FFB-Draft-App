@@ -5,44 +5,46 @@
 {% endblock %}
 
 {% block content %}
-  <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-dark" style="color:white">
+  <div class="jumbotron text-center" style="color:white; background-color:#1D2228;">
       <div class="col-md-5 p-lg-5 mx-auto my-5">
           <h1 class="display-4 font-weight-normal">Fantasy Draft App</h1>
           <p class="lead font-weight-normal">View expert rankings. Customize rankings and tiers. Win your draft</p>
-          <a class="btn btn-outline-success" href="{{ url_for('rankings_page') }}">Customize Rankings</a>
+          <a class="btn btn-outline-warning" href="{{ url_for('rankings_page') }}">Customize Rankings</a>
       </div>
       <div class="product-device box-shadow d-none d-md-block"></div>
       <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
   </div>
-  <h2 class="text-center">Current Overall Rankings</h2>
-  <table class="table table-hover table-striped table-dark overflow-hidden" style="width:98%; margin-left:auto; margin-right:auto;">
-    <thead>
-        <tr>
-            <th scope="col" class="text-center">Rank</th>
-            <th scope="col" class="text-center">Name</th>
-            <th scope="col" class="text-center">Position</th>
-            <th scope="col" class="text-center">Team</th>
-            <th scope="col" class="text-center">ADP</th>
-            <th scope="col" class="text-center">Fantasy Pros</th>
-            <th scope="col" class="text-center">FFB Calculator</th>
-            <th scope="col" class="text-center">Sporting News</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for player in players %} 
-            <tr>
-                <td class="text-center">{{ player.rank }}</td>
-                <td class="text-center">{{ player.name }}</td>
-                <td class="text-center">{{ player.position }}</td>
-                <td class="text-center">{{ player.team }}</td>
-                <td class="text-center">{{ player.rank }}</td>
-                <td class="text-center">{{ player.fp_rank }}</td>
-                <td class="text-center">{{ player.ffb_calc_rank }}</td>
-                <td class="text-center">{{ player.sport_news_rank }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-  </table>
+  <div class="container"> 
+    <h2 class="text-center">Current Overall Rankings</h2>
+    <table class="table table-hover table-dark table-striped overflow-hidden" style="width:98%; margin-left:auto; margin-right:auto; background-color: #1D2228; color:white">
+      <thead>
+          <tr>
+              <th scope="col" class="text-center">Rank</th>
+              <th scope="col" class="text-center">Name</th>
+              <th scope="col" class="text-center">Position</th>
+              <th scope="col" class="text-center">Team</th>
+              <th scope="col" class="text-center">ADP</th>
+              <th scope="col" class="text-center">Fantasy Pros</th>
+              <th scope="col" class="text-center">FFB Calculator</th>
+              <th scope="col" class="text-center">Sporting News</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for player in players %} 
+              <tr>
+                  <td class="text-center">{{ player.rank }}</td>
+                  <td class="text-center">{{ player.name }}</td>
+                  <td class="text-center">{{ player.position }}</td>
+                  <td class="text-center">{{ player.team }}</td>
+                  <td class="text-center">{{ player.rank }}</td>
+                  <td class="text-center">{{ player.fp_rank }}</td>
+                  <td class="text-center">{{ player.ffb_calc_rank }}</td>
+                  <td class="text-center">{{ player.sport_news_rank }}</td>
+              </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}
 
 
