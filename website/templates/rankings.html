@@ -5,9 +5,11 @@
 {% endblock %}
 
 {% block content %}
-	<br>
-	<h1 class="text-center">Your {% block h1 %}{% endblock %} Custom Rankings</h1>
-	<br>
+	<div class="jumbotron text-center" style="color:white; background-color:#1D2228;">
+	   <div class=" mx-auto my-1">
+	       <h1 class="display-4 font-weight-normal" style="color: white">Your {% block h1 %}{% endblock %} Custom Rankings</h1>
+	   </div>
+	</div>
 	<div class="text-center row">
 		<p style=""class="col">Filter By Position: <a class="btn btn-dark" href="{{ url_for('rankings_page') }}">All</a> | <a href="{{ url_for('qb_rankings_page') }}">QB</a> | <a href="{{ url_for('rb_rankings_page') }}">RB</a> | <a href="{{ url_for('wr_rankings_page') }}">WR</a> | <a href="{{ url_for('te_rankings_page') }}">TE</a> 
 		</p>
@@ -42,9 +44,9 @@
 		<tbody>
 			{% for player in players %}
 			{% include 'includes/players_modals.html' %}
-				{% if player.rank % 10 == 1 %}
+				{% if player.rank % 10 == 2 %}
 					<tr>
-						<td class="bg-primary">Tier {{ player.rank // 10 }}</td>
+						<td class="bg-secondary">Tier {{ (player.rank // 10) + 1 }}  <a href="#">Edit Tier</a></td>
 					</tr>
 				{% endif %}
 				<tr class="player-row" id="{{ player.id }}-row">
@@ -61,7 +63,7 @@
 						<button class="btn btn-outline btn-outline-info btn-sm" data-toggle="modal" data-target="#Modal-MoreInfo-{{ player.id }}">More Info</button>
 						<button id="{{ player.id }}-btn"class="btn btn-outline btn-outline-success btn-sm">Change Ranking</button>-->
 						
-							<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player.id }}">Change Ranking</button>
+							<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player.id }}">Swap</button>
 					</td>
 				</tr>
 			{% endfor %}

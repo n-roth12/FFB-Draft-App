@@ -117,7 +117,9 @@ def logout_page():
 
 @app.route('/draft')
 def draft_page():
-    return render_template('draft.html')
+    players = Player.query.order_by('rank').all()
+    swap_rank_form = SwapRankForm()
+    return render_template('draft.html', players=players, swap_rank_form=swap_rank_form)
 
 
 def scrape():

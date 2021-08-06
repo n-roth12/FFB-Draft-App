@@ -5,30 +5,75 @@
 {% endblock %}
 
 {% block content %}
+<div class="jumbotron text-center" style="color:white; background-color:#1D2228;">
+   <div class="mx-auto my-1">
+       <h1 class="display-4 font-weight-normal" style="color: white">Draft Helper</h1>
+   </div>
+</div>
 
+<div class="row mt-5">
 
-<table style="width:80%; margin-right: auto; margin-left: auto; margin-top: 5%;">
-	<thead>
-		<tr class="row">
-		{% for i in range(12) %}
-			<td class="col bg-dark">
-				<p>Team {{i + 1}}</p>
-			</td>
-		{% endfor %}
-	</thead>
+	<div class="col-sm-2 m-3">
+		<table class="table table-hover table-striped table-sm table-dark" style="width: 90%; margin-left:auto; margin-right:auto; background-color: #1D2228">
+			<thead>
+				<h2 class="text-center">Draftable Players</h2>
+				<tr>
+					<th scope="col" class="text-center">Rank</th>
+					<th scope="col" class="text-center">Name</th>
+					<th scope="col" class="text-center">Position</th>
+					<th scope="col" class="text-center">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for player in players %}
+				{% include 'includes/players_modals.html' %}
+					<tr class="player-row" id="{{ player.id }}-row">
+						<td class="text-center custom-rank" form="player-form">{{ player.rank }}</td>
+						<td class="text-center">{{ player.name }}</td>
+						<td class="text-center">{{ player.position }}</td>
+						<td class="text-center">
+							<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player.id }}">Draft</button>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 
-	<tbody>
-	{% for i in range(15) %}
-		<tr class="row">
-			{% for j in range(12) %}
-				<td class="col card" id="rd{{i + 1}}-pk{{ (j + 1 - (13 * (i % 2)))|abs }}">
-					<p>Pick {{i + 1}}.{{(j + 1 - (13 * (i % 2)))|abs}}</p>
-				</td>
+	<div class="col-sm-8 m-1">
+		<table>
+			<thead>
+				<h2 class="text-center">Draft Board</h2>
+				<tr class="row">
+				{% for i in range(12) %}
+					<td class="col bg-dark">
+						<p>Team {{i + 1}}</p>
+					</td>
+				{% endfor %}
+				</tr>
+			</thead>
+
+			<tbody>
+			{% for i in range(15) %}
+				<tr class="row">
+					{% for j in range(12) %}
+						<td class="col card" id="rd{{i + 1}}-pk{{ (j + 1 - (13 * (i % 2)))|abs }}">
+							<p>Pick {{i + 1}}.{{(j + 1 - (13 * (i % 2)))|abs}}</p>
+						</td>
+					{% endfor %}
+				</tr>
 			{% endfor %}
-		</tr>
-	{% endfor %}
-	</tbody>
-</table>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="col-sm-1">
+		<ul>
+			<li>Advice #1</li>
+			<li>Advice #2</li>
+		</ul>
+	</div>
+</div>
 
 
 <style>
