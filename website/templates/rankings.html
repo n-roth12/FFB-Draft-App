@@ -42,6 +42,11 @@
 		<tbody>
 			{% for player in players %}
 			{% include 'includes/players_modals.html' %}
+				{% if player.rank % 10 == 1 %}
+					<tr>
+						<td class="bg-primary">Tier {{ player.rank // 10 }}</td>
+					</tr>
+				{% endif %}
 				<tr class="player-row" id="{{ player.id }}-row">
 					<td class="text-center custom-rank" form="player-form">{{ player.rank }}</td>
 					<td class="text-center">{{ player.name }}</td>

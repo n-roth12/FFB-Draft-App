@@ -5,171 +5,48 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
 
-	<div class="col-sm-1 p-0">
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<p>Darren Waller</p>
-			</div>
-		</div>
-	</div>
 
-	<div class="col-sm-1 p-0">
-		<div class="card">
-			<div class="card-body">
-				<p>Dalvin Cook</p>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<p>Deandre Hopkins</p>
-			</div>
-		</div>
-	</div>
+<table style="width:80%; margin-right: auto; margin-left: auto; margin-top: 5%;">
+	<thead>
+		<tr class="row">
+		{% for i in range(12) %}
+			<td class="col bg-dark">
+				<p>Team {{i + 1}}</p>
+			</td>
+		{% endfor %}
+	</thead>
 
-	<div class="col-sm-1 p-0">
-		<div class="card">
-			<div class="card-body">
-				<p>Derrick Henry</p>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-	</div>
+	<tbody>
+	{% for i in range(15) %}
+		<tr class="row">
+			{% for j in range(12) %}
+				<td class="col card" id="rd{{i + 1}}-pk{{ (j + 1 - (13 * (i % 2)))|abs }}">
+					<p>Pick {{i + 1}}.{{(j + 1 - (13 * (i % 2)))|abs}}</p>
+				</td>
+			{% endfor %}
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
 
-	<div class="col-sm-1 p-0">
-		<div class="card">
-			<div class="card-body">
-				<p>Alvin Kamara</p>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-1 p-0">
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-1 p-0">
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-1 p-0">
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-1 p-0">
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-1 p-0">
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-1 p-0">
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-1 p-0">
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-1 p-0">
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<p>Christian McCaffery</p>
-			</div>
-		</div>
-	</div>
-
-</div>
 
 <style>
 	.card {
 		height: 100px;
 		background-color: grey; 
 		color: #E1E2E2;
+		text-align: center;
+		margin:  1px 1px 1px 1px;
+	}
+
+	p {
+		color: white;
+	}
+
+	td {
+		text-align: center;
+		justify-content: center;
 	}
 </style>
 
