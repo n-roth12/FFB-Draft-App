@@ -1,7 +1,7 @@
 from website import app
 from flask import render_template, redirect, url_for, flash, request
 from website.models import Player, User
-from website.forms import RegisterForm, LoginForm, SwapRankForm
+from website.forms import RegisterForm, LoginForm, SwapRankForm 
 from website import db
 from flask_login import login_user, logout_user, login_required, current_user
 from selenium import webdriver
@@ -12,6 +12,20 @@ import re
 @app.route('/')
 @app.route('/home')  
 def home_page():
+    players = Player.query.order_by('rank').all()
+    return render_template('home.html', players=players)
+
+# Route specifically dedicated to clearing and reconstructing database
+# from website scrapes. Entering this route will delete all database information
+# including registered users and players.
+@app.route('/scrape')
+def scrape_route():
+    db.drop_all()
+    db.create_all()
+    db.session.commit()
+    scrape()
+    generateAdps()
+    generatePosRanks()
     players = Player.query.order_by('rank').all()
     return render_template('home.html', players=players)
 
@@ -127,7 +141,7 @@ def scrape():
     opts.add_argument("--headless")
     opts.add_argument("--disable-notifications")
 
-    fp_scrape(opts)
+    #fp_scrape(opts)
     ffb_calc_scrape(opts)
     sport_news_scrape(opts)
 
@@ -142,7 +156,6 @@ def fp_scrape(opts):
     rankings_table = driver.find_element_by_id('ranking-table').find_element_by_tag_name('tbody')
     trs = rankings_table.find_elements_by_class_name('player-row')[:200]
 
-    ranks = []
     names = []
     teams = []
     positions = []
@@ -151,22 +164,17 @@ def fp_scrape(opts):
     for tr in trs:
         tds = tr.find_elements_by_tag_name('td')
         rank = int(tds[0].text)
-        ranks.append(rank)
         names.append(tds[2].find_element_by_tag_name('a').text)
         teams.append(tds[2].find_element_by_tag_name('span').text.replace('(', '').replace(')', ''))
         position_rank = tds[3].text
         positions.append(re.sub('[^a-zA-Z]+', '', position_rank))
         fp_ranks.append(rank)
     
-    for i in range(len(ranks)):
-        p1 = Player.query.filter_by(name=names[i]).first()
-        if p1 == None:
-            player =  Player(rank=ranks[i], name=names[i], team=teams[i], position=positions[i], fp_rank=fp_ranks[i])
-            db.session.add(player)
-            db.session.commit()
-        else:
-            p1.fp_rank = fp_ranks[i]
-            db.session.commit()
+    for i in range(len(names)):
+        player =  Player(name=names[i], team=teams[i], position=positions[i], fp_rank=fp_ranks[i])
+        db.session.add(player)
+        db.session.commit()
+
 
     print('Completed scraping fantasy pros ranks!')
     driver.quit()
@@ -181,7 +189,6 @@ def ffb_calc_scrape(opts):
     rankings_table = body.find_element_by_class_name('table')
     trs = driver.find_elements_by_tag_name('tr')[1:]
 
-    ranks = []
     names = []
     teams = []
     positions = []
@@ -194,20 +201,19 @@ def ffb_calc_scrape(opts):
         team = tds[2].text
         position = tds[3].text
 
-        ranks.append(rank)
         names.append(name)
         teams.append(team)
         positions.append(position)
         ffb_calc_ranks.append(rank)
 
 
-    for i in range(len(ranks)):
+    for i in range(len(names)):
         p1 = Player.query.filter_by(name=names[i]).first()
         if p1 == None:
-            pass
-        #    player =  Player(rank=ranks[i], name=names[i], team=teams[i], position=positions[i], ffb_calc_rank=ffb_calc_ranks[i])
-        #    db.session.add(player)
-        #    db.session.commit()
+        #    pass
+            player =  Player(name=names[i], team=teams[i], position=positions[i], ffb_calc_rank=ffb_calc_ranks[i])
+            db.session.add(player)
+            db.session.commit()
         else:
             p1.ffb_calc_rank = ffb_calc_ranks[i]
             db.session.commit()
@@ -225,7 +231,6 @@ def sport_news_scrape(opts):
     table = body.find_element_by_tag_name('tbody')
     trs = table.find_elements_by_tag_name('tr')[1:]
 
-    ranks = []
     names = []
     positions = []
     teams = []
@@ -234,7 +239,6 @@ def sport_news_scrape(opts):
     for tr in trs:
         data = tr.find_elements_by_tag_name('td')
         rank = int(data[0].text)
-        ranks.append(rank)
         name_and_team = data[1].text.split(', ')
         names.append(name_and_team[0])
         if len(name_and_team) > 1:
@@ -244,7 +248,7 @@ def sport_news_scrape(opts):
         positions.append(data[2].text)
         sport_news_ranks.append(rank)
 
-    for i in range(len(ranks)):
+    for i in range(len(names)):
         p1 = Player.query.filter_by(name=names[i]).first()
         if p1 == None:
             pass
@@ -257,6 +261,51 @@ def sport_news_scrape(opts):
 
     print('Completed scraping sporting news ranks!')
     driver.quit()
+
+def generateAdps():
+    players = Player.query.all()
+
+    for player in players:
+        sum_ranks = 0
+        count = 1
+        if player.ffb_calc_rank:
+            sum_ranks += player.ffb_calc_rank
+            count += 1
+        if player.sport_news_rank:
+            sum_ranks += player.sport_news_rank
+            count += 1
+
+        adp = sum_ranks / count
+        player.adp = adp
+        db.session.commit()
+
+def generatePosRanks():
+    players = Player.query.order_by('adp').all()
+    ovr_count = 0
+    qb_count = 0
+    rb_count = 0
+    wr_count = 0
+    te_count = 0
+
+    for player in players:
+        pos = player.position
+        ovr_count += 1
+        player.rank = ovr_count
+        if pos == 'QB':
+            qb_count += 1
+            player.position_rank = qb_count
+        elif pos == 'RB':
+            rb_count += 1
+            player.position_rank = rb_count
+        elif pos == 'WR':
+            wr_count += 1
+            player.position_rank = wr_count
+        else:
+            te_count += 1
+            player.position_rank = te_count
+        db.session.commit()
+
+
 
 
 

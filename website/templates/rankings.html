@@ -44,7 +44,7 @@
 		<tbody>
 			{% for player in players %}
 			{% include 'includes/players_modals.html' %}
-				{% if player.rank % 10 == 2 %}
+				{% if player.rank % 10 == 1 %}
 					<tr>
 						<td class="bg-secondary">Tier {{ (player.rank // 10) + 1 }}  <a href="#">Edit Tier</a></td>
 					</tr>
@@ -52,9 +52,9 @@
 				<tr class="player-row" id="{{ player.id }}-row">
 					<td class="text-center custom-rank" form="player-form">{{ player.rank }}</td>
 					<td class="text-center">{{ player.name }}</td>
-					<td class="text-center">{{ player.position }}</td>
+					<td class="text-center">{{ player.position }} {{ player.position_rank }}</td>
 					<td class="text-center">{{ player.team }}</td>
-					<td class="text-center">{{ player.rank }}</td>
+					<td class="text-center">{{ player.adp }}</td>
 					<td class="text-center">{{ player.fp_rank }}</td>
 					<td class="text-center">{{ player.ffb_calc_rank }}</td>
 					<td class="text-center">{{ player.sport_news_rank }}</td>

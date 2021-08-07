@@ -26,13 +26,16 @@ class User(db.Model, UserMixin):
 
 class Player(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    rank = db.Column(db.Integer(), nullable=False)
+    rank = db.Column(db.Integer())
     name = db.Column(db.String(length=40), nullable=False, unique=True)
     position = db.Column(db.String(length=3), nullable=False)
     team = db.Column(db.String(length=4))
+    adp = db.Column(db.DECIMAL(3,2))
     fp_rank = db.Column(db.Integer())
     ffb_calc_rank = db.Column(db.Integer())
     sport_news_rank = db.Column(db.Integer())
+    overall_tier = db.Column(db.Integer())
+    position_rank = db.Column(db.Integer())
 
     def __repr__(self):
         return f'Player {self.name}'

@@ -14,7 +14,7 @@
 <div class="row mt-5">
 
 	<div class="col-sm-2 m-3">
-		<table class="table table-hover table-striped table-sm table-dark" style="width: 90%; margin-left:auto; margin-right:auto; background-color: #1D2228">
+		<table class="table table-hover table-striped table-sm tab" style="width: 90%; margin-left:auto; margin-right:auto;">
 			<thead>
 				<h2 class="text-center">Draftable Players</h2>
 				<tr>
@@ -32,7 +32,7 @@
 						<td class="text-center">{{ player.name }}</td>
 						<td class="text-center">{{ player.position }}</td>
 						<td class="text-center">
-							<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player.id }}">Draft</button>
+							<button class="btn btn-outline btn-outline-primary btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player.id }}">Draft</button>
 						</td>
 					</tr>
 				{% endfor %}
@@ -58,7 +58,7 @@
 				<tr class="row">
 					{% for j in range(12) %}
 						<td class="col card" id="rd{{i + 1}}-pk{{ (j + 1 - (13 * (i % 2)))|abs }}">
-							<p>Pick {{i + 1}}.{{(j + 1 - (13 * (i % 2)))|abs}}</p>
+							<p>{{i + 1}}.{{(j + 1 - (13 * (i % 2)))|abs}}</p>
 						</td>
 					{% endfor %}
 				</tr>
@@ -78,7 +78,7 @@
 
 <style>
 	.card {
-		height: 100px;
+		height: 70px;
 		background-color: grey; 
 		color: #E1E2E2;
 		text-align: center;

@@ -26,8 +26,10 @@ class LoginForm(FlaskForm):
 	password = PasswordField(label='Password:', validators=[DataRequired()])
 	submit = SubmitField(label='Sign In')
 
+# Must commment out this form when rebuilding database
 class SwapRankForm(FlaskForm):
 	num_players = len(Player.query.all())
 	new_rank = IntegerField(label='New Player Rank', validators=[DataRequired(), NumberRange(1, num_players - 1)])
 	submit = SubmitField(label='Submit Rank Change')
+
 
