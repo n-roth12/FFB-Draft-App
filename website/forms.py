@@ -29,7 +29,7 @@ class LoginForm(FlaskForm):
 # Must commment out this form when rebuilding database
 class SwapRankForm(FlaskForm):
 	num_players = len(Player.query.all())
-	new_rank = IntegerField(label='New Player Rank', validators=[DataRequired(), NumberRange(1, num_players - 1)])
+	new_rank= IntegerField(label='Old Player Rank', validators=[DataRequired(), NumberRange(1, num_players - 1)])
 	submit = SubmitField(label='Submit Rank Change')
 
 

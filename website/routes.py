@@ -1,6 +1,6 @@
 from website import app
 from flask import render_template, redirect, url_for, flash, request
-from website.models import Player, User
+from website.models import Player, User, Rank
 from website.forms import RegisterForm, LoginForm, SwapRankForm 
 from website import db
 from flask_login import login_user, logout_user, login_required, current_user
@@ -36,20 +36,22 @@ def rankings_page():
 
     if request.method == "POST":
         if swap_rank_form.validate_on_submit():
-            swapped_player = request.form.get('swapped_player')
+            swapped_player_id = request.form.get('swapped_player')
             new_rank = request.form.get('new_rank')
-            player1_object = Player.query.filter_by(name=swapped_player).first()
-            player2_object = Player.query.filter_by(rank=new_rank).first()
-            old_rank = player1_object.rank
-            player1_object.rank = new_rank
-            player2_object.rank = old_rank
+            player1_object = Rank.query.filter_by(user_id=current_user.id, player_id=swapped_player_id).first()
+            player2_object = Rank.query.filter_by(user_id=current_user.id, custom_rank=new_rank).first()
+            old_rank = player1_object.custom_rank
+            player1_object.custom_rank = new_rank
+            player2_object.custom_rank = old_rank
             db.session.commit()
-            flash('You swapped ' + player1_object.name + ' with ' + player2_object.name +'!', category='success')
+
+            flash('You swapped rank !', category='success')
         else:
             flash('Please enter the rank of a player! ', category='danger')
 
-    
-    players = Player.query.order_by('rank').all()
+    #ranks = Rank.query.filter_by(user_id=current_user.id).order_by('custom_rank')
+
+    players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).order_by(Rank.custom_rank).all()
     return render_template('rankings.html', players=players, swap_rank_form=swap_rank_form)
 
 @app.route('/rankings/qb', methods=['GET', 'POST'])
@@ -87,6 +89,7 @@ def te_rankings_page():
 @app.route('/register', methods=['GET', 'POST'])    # needed so that this route can handle post requests
 def register_page():
     form = RegisterForm()
+    players = Player.query.order_by('rank').all()
 
     if form.validate_on_submit():
         user_to_create = User(username=form.username.data,
@@ -94,7 +97,11 @@ def register_page():
             password=form.password1.data)
         db.session.add(user_to_create)
         db.session.commit()
-            
+        for player in players:
+            rank = Rank(user_id=user_to_create.id, player_id=player.id, custom_rank=player.rank)
+            db.session.add(rank)
+            db.session.commit()
+
         login_user(user_to_create)
         flash(f'Account created successfully! You are logged in as {user_to_create.username}', category='success')
 
@@ -142,8 +149,8 @@ def scrape():
     opts.add_argument("--disable-notifications")
 
     #fp_scrape(opts)
-    ffb_calc_scrape(opts)
     sport_news_scrape(opts)
+    ffb_calc_scrape(opts)
 
 def fp_scrape(opts):
     print('Scraping fantasy pros rankings...')
@@ -210,10 +217,10 @@ def ffb_calc_scrape(opts):
     for i in range(len(names)):
         p1 = Player.query.filter_by(name=names[i]).first()
         if p1 == None:
-        #    pass
-            player =  Player(name=names[i], team=teams[i], position=positions[i], ffb_calc_rank=ffb_calc_ranks[i])
-            db.session.add(player)
-            db.session.commit()
+            pass
+        #    player =  Player(name=names[i], team=teams[i], position=positions[i], ffb_calc_rank=ffb_calc_ranks[i])
+        #    db.session.add(player)
+        #    db.session.commit()
         else:
             p1.ffb_calc_rank = ffb_calc_ranks[i]
             db.session.commit()
@@ -251,10 +258,10 @@ def sport_news_scrape(opts):
     for i in range(len(names)):
         p1 = Player.query.filter_by(name=names[i]).first()
         if p1 == None:
-            pass
-        #    player =  Player(rank=ranks[i], name=names[i], team=teams[i], position=positions[i], sport_news_rank=sport_news_ranks[i])
-        #    db.session.add(player)
-        #    db.session.commit()
+        #    pass
+            player =  Player(name=names[i], team=teams[i], position=positions[i], sport_news_rank=sport_news_ranks[i])
+            db.session.add(player)
+            db.session.commit()
         else:
             p1.sport_news_rank = sport_news_ranks[i]
             db.session.commit()
@@ -267,7 +274,7 @@ def generateAdps():
 
     for player in players:
         sum_ranks = 0
-        count = 1
+        count = 0
         if player.ffb_calc_rank:
             sum_ranks += player.ffb_calc_rank
             count += 1
