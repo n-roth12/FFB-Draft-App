@@ -49,9 +49,7 @@ def rankings_page():
         else:
             flash('Please enter the rank of a player! ', category='danger')
 
-    #ranks = Rank.query.filter_by(user_id=current_user.id).order_by('custom_rank')
-
-    players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).order_by(Rank.custom_rank).all()
+    players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank).all()
     return render_template('rankings.html', players=players, swap_rank_form=swap_rank_form)
 
 @app.route('/rankings/qb', methods=['GET', 'POST'])
@@ -59,7 +57,7 @@ def rankings_page():
 def qb_rankings_page():
     swap_rank_form = SwapRankForm()
 
-    qb_players = Player.query.filter_by(position='QB').order_by('rank')
+    qb_players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).filter(Player.position == 'QB').order_by(Rank.custom_rank).all()
     return render_template('qb_rankings.html', players=qb_players, swap_rank_form=swap_rank_form)
 
 @app.route('/rankings/rb', methods=['GET', 'POST'])
@@ -67,7 +65,7 @@ def qb_rankings_page():
 def rb_rankings_page():
     swap_rank_form = SwapRankForm()
 
-    rb_players = Player.query.filter_by(position='RB').order_by('rank')
+    rb_players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).filter(Player.position == 'RB').order_by(Rank.custom_rank).all()
     return render_template('rb_rankings.html', players=rb_players, swap_rank_form=swap_rank_form)
 
 @app.route('/rankings/wr', methods=['GET', 'POST'])
@@ -75,7 +73,7 @@ def rb_rankings_page():
 def wr_rankings_page():
     swap_rank_form = SwapRankForm()
 
-    wr_players = Player.query.filter_by(position='WR').order_by('rank')
+    wr_players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).filter(Player.position == 'RB').order_by(Rank.custom_rank).all()
     return render_template('wr_rankings.html', players=wr_players, swap_rank_form=swap_rank_form)
 
 @app.route('/rankings/te', methods=['GET', 'POST'])
@@ -83,10 +81,10 @@ def wr_rankings_page():
 def te_rankings_page():
     swap_rank_form = SwapRankForm()
 
-    te_players = Player.query.filter_by(position='TE').order_by('rank')
+    te_players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).filter(Player.position == 'TE').order_by(Rank.custom_rank).all()
     return render_template('te_rankings.html', players=te_players, swap_rank_form=swap_rank_form)
 
-@app.route('/register', methods=['GET', 'POST'])    # needed so that this route can handle post requests
+@app.route('/register', methods=['GET', 'POST'])
 def register_page():
     form = RegisterForm()
     players = Player.query.order_by('rank').all()
@@ -104,8 +102,6 @@ def register_page():
 
         login_user(user_to_create)
         flash(f'Account created successfully! You are logged in as {user_to_create.username}', category='success')
-
-
         return redirect(url_for('rankings_page'))
 
     # checking if there are no errors from the validations
@@ -138,7 +134,7 @@ def logout_page():
 
 @app.route('/draft')
 def draft_page():
-    players = Player.query.order_by('rank').all()
+    players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).order_by(Rank.custom_rank).all()
     swap_rank_form = SwapRankForm()
     return render_template('draft.html', players=players, swap_rank_form=swap_rank_form)
 

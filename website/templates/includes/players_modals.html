@@ -27,14 +27,14 @@
 	</div>
 </div>
 
-<div class="modal fade" id="Modal-SwapRank-{{ player.id }}"
+<div class="modal fade" id="Modal-SwapRank-{{ player[0].id }}"
 	tabindex="-1"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="ModalLabel">
-					{{ player[0].rank }}. {{ player[0].name }}
+					{{ player.custom_rank }}. {{ player[0].name }}
 				</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>

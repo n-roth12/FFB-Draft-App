@@ -44,13 +44,13 @@
 		<tbody>
 			{% for player in players %}
 			{% include 'includes/players_modals.html' %}
-				{% if player[1] % 10 == 1 %}
+				{% if player.custom_rank % 10 == 1 %}
 					<tr>
-						<td class="bg-secondary">Tier {{ (player[1] // 10) + 1 }}  <a href="#">Edit Tier</a></td>
+						<td class="bg-secondary">Tier {{ (player.custom_rank // 10) + 1 }}  <a href="#">Edit Tier</a></td>
 					</tr>
 				{% endif %}
 				<tr class="player-row" id="{{ player.id }}-row">
-					<td class="text-center custom-rank" form="player-form">{{ player[1] }}</td>
+					<td class="text-center custom-rank" form="player-form">{{ player.custom_rank }}</td>
 					<td class="text-center">{{ player[0].name }}</td>
 					<td class="text-center">{{ player[0].position }} {{ player[0].position_rank }}</td>
 					<td class="text-center">{{ player[0].team }}</td>
@@ -63,7 +63,7 @@
 						<button class="btn btn-outline btn-outline-info btn-sm" data-toggle="modal" data-target="#Modal-MoreInfo-{{ player.id }}">More Info</button>
 						<button id="{{ player.id }}-btn"class="btn btn-outline btn-outline-success btn-sm">Change Ranking</button>-->
 						
-							<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player.id }}">Swap</button>
+							<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player[0].id }}">Swap</button>
 					</td>
 				</tr>
 			{% endfor %}
@@ -124,10 +124,6 @@
 			addListeners();
 		}
 
-		function save_changes() {
-
-
-		}
 		/*
 		have the above function send to a new route and then have that be a post request, it 
 		can even redirect back to the same page

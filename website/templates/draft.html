@@ -7,32 +7,54 @@
 {% block content %}
 <div class="jumbotron text-center" style="color:white; background-color:#1D2228;">
    <div class="mx-auto my-1">
-       <h1 class="display-4 font-weight-normal" style="color: white">Draft Helper</h1>
+   	<h1 class="display-4 font-weight-normal" style="color: white">Draft Helper</h1>
+   	<br>
+   	<form class="form-group row">
+   		<div class="col-1 offset-5">
+   			<label for="num_teams" style="color:white;">Choose number of teams:</label>
+   			<select name="num_teams" id="num_teams" class="form-control">
+   				<option value=8>8</option>
+   				<option value=9>9</option>
+   				<option value=10>10</option>
+   				<option value=11>11</option>
+   				<option value=12>12</option>
+   			</select>
+   		</div>
+   		<div class="col-1">
+   			<label for="draft_type" style="color:white;">Choose a draft type:</label>
+   			<select name="draft_type" id="draft_type" class="form-control">
+   				<option value="snake">Snake</option>
+   				<option value="linear">Linear</option>
+   			</select>
+	   	</div>
+   	</form>
+      <a class="btn btn-outline-warning" onclick="draft()">Start Draft</a>
    </div>
 </div>
 
 <div class="row mt-5">
 
-	<div class="col-sm-2 m-3">
-		<table class="table table-hover table-striped table-sm tab" style="width: 90%; margin-left:auto; margin-right:auto;">
+	<div class="col-sm-3">
+		<table class="table table-hover table-striped table-sm tab" style="margin-left:auto; margin-right:auto;">
 			<thead>
 				<h2 class="text-center">Draftable Players</h2>
 				<tr>
-					<th scope="col" class="text-center">Rank</th>
+					<th scope="col" class="text-center">Your Rank</th>
 					<th scope="col" class="text-center">Name</th>
 					<th scope="col" class="text-center">Position</th>
-					<th scope="col" class="text-center">Options</th>
+					<th scope="col" class="text-center">ADP</th>
+					<th scope="col" class="text-center options-col">Options</th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for player in players %}
-				{% include 'includes/players_modals.html' %}
 					<tr class="player-row" id="{{ player.id }}-row">
-						<td class="text-center custom-rank" form="player-form">{{ player.rank }}</td>
-						<td class="text-center">{{ player.name }}</td>
-						<td class="text-center">{{ player.position }}</td>
-						<td class="text-center">
-							<button class="btn btn-outline btn-outline-primary btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player.id }}">Draft</button>
+						<td class="text-center custom-rank" form="player-form">{{ player.custom_rank }}</td>
+						<td class="text-center">{{ player[0].name }}</td>
+						<td class="text-center">{{ player[0].position }}</td>
+						<td class="text-center">{{ player[0].adp }}
+						<td class="text-center options-col">
+							<button class="btn btn-outline btn-outline-primary btn-sm" value="{{ player[0].id }}">Draft</button>
 						</td>
 					</tr>
 				{% endfor %}
@@ -40,13 +62,13 @@
 		</table>
 	</div>
 
-	<div class="col-sm-8 m-1">
-		<table>
+	<div class="col-sm-7">
+		<table class="draft-board">
 			<thead>
 				<h2 class="text-center">Draft Board</h2>
 				<tr class="row">
 				{% for i in range(12) %}
-					<td class="col bg-dark">
+					<td class="col">
 						<p>Team {{i + 1}}</p>
 					</td>
 				{% endfor %}
@@ -57,7 +79,7 @@
 			{% for i in range(15) %}
 				<tr class="row">
 					{% for j in range(12) %}
-						<td class="col card" id="rd{{i + 1}}-pk{{ (j + 1 - (13 * (i % 2)))|abs }}">
+						<td class="col card draft-card" id="rd{{i + 1}}-pk{{ (j + 1 - (13 * (i % 2)))|abs }}">
 							<p>{{i + 1}}.{{(j + 1 - (13 * (i % 2)))|abs}}</p>
 						</td>
 					{% endfor %}
@@ -67,19 +89,14 @@
 		</table>
 	</div>
 
-	<div class="col-sm-1">
-		<ul>
-			<li>Advice #1</li>
-			<li>Advice #2</li>
-		</ul>
-	</div>
 </div>
 
 
 <style>
 	.card {
 		height: 70px;
-		background-color: grey; 
+		width: 100px;
+		background-color: #A9A9A9; 
 		color: #E1E2E2;
 		text-align: center;
 		margin:  1px 1px 1px 1px;
@@ -89,11 +106,45 @@
 		color: white;
 	}
 
+	thead p {
+		color: black;
+	}
+
 	td {
 		text-align: center;
 		justify-content: center;
 	}
+
+	.draft-card {
+		font-size: 10pt;
+		border: none;
+		border-radius: 5px;
+	}
+
+	.hidden {
+		display: None;
+	}
 </style>
+
+<script>
+
+	function draft() {
+		var round = 1
+		var pick = 1
+		draft_btns = document.getElementsByClassName("btn btn-outline btn-outline-primary btn-sm")
+		for (var i = 0; i < draft_btns.length; i++) {
+			draft_btns[i].classList.remove("hidden")
+			draft_btns[i].addEventListener("click", draft_player)
+		}
+
+		function draft_player() {
+			player_id = this.value
+			console.log(player_id)
+		}
+	}
+
+
+</script>
 
 
 
