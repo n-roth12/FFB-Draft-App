@@ -28,14 +28,15 @@
    			</select>
 	   	</div>
    	</form>
-      <a class="btn btn-outline-warning" onclick="draft()">Start Draft</a>
+      <a class="btn btn-outline-warning" id="start-btn" onclick="draft()">Start Draft</a>
+      <a class="btn btn-outline-secondary hidden" id="reset-btn" onclick="reset_draft()">Reset Draft</a>
    </div>
 </div>
 
 <div class="row mt-5">
 
 	<div class="col-sm-3">
-		<table class="table table-hover table-striped table-sm tab" style="margin-left:auto; margin-right:auto;">
+		<table id="draftable-players-table" class="table table-hover table-sm tab" style="margin-left:auto; margin-right:auto;">
 			<thead>
 				<h2 class="text-center">Draftable Players</h2>
 				<tr>
@@ -48,9 +49,9 @@
 			</thead>
 			<tbody>
 				{% for player in players %}
-					<tr class="player-row" id="{{ player.id }}-row">
-						<td class="text-center custom-rank" form="player-form">{{ player.custom_rank }}</td>
-						<td class="text-center">{{ player[0].name }}</td>
+					<tr class="player-row" id="{{ player[0].id }}-row">
+						<td class="text-center">{{ player.custom_rank }}</td>
+						<td class="text-center name">{{ player[0].name }}</td>
 						<td class="text-center">{{ player[0].position }}</td>
 						<td class="text-center">{{ player[0].adp }}
 						<td class="text-center options-col">
@@ -128,7 +129,15 @@
 
 <script>
 
+	window.addEventListener("load", initialize)
+
+	function initialize() {
+	}
+
+	var draft_is_occuring = false
+
 	function draft() {
+		draft_is_occuring = true
 		var round = 1
 		var pick = 1
 		draft_btns = document.getElementsByClassName("btn btn-outline btn-outline-primary btn-sm")
@@ -136,11 +145,34 @@
 			draft_btns[i].classList.remove("hidden")
 			draft_btns[i].addEventListener("click", draft_player)
 		}
+		document.getElementById("reset-btn").classList.remove("hidden")
+		document.getElementById("start-btn").classList.add("hidden")
 
 		function draft_player() {
-			player_id = this.value
-			console.log(player_id)
+			if (draft_is_occuring  == true) {
+				player_id = this.value
+				player_row = document.getElementById(player_id + "-row")
+				player_row.classList.add("hidden")
+				document.getElementById("rd" + round + "-pk" + pick).innerHTML = player_row.getElementsByClassName("name")[0].innerHTML
+				if (pick >= 12) {
+					pick = 1
+					round++
+				} else {
+					pick++
+				}
+			}
 		}
+
+	}
+	
+	function reset_draft() {
+		draft_is_occuring = false
+		player_rows = document.getElementsByClassName("player-row")
+		for (var i = 0; i < player_rows.length; i++) {
+			player_rows[i].classList.remove("hidden")
+		}
+		document.getElementById("start-btn").classList.remove("hidden")
+		document.getElementById("reset-btn").classList.add("hidden")
 	}
 
 

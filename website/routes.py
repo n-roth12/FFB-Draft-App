@@ -134,7 +134,7 @@ def logout_page():
 
 @app.route('/draft')
 def draft_page():
-    players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).order_by(Rank.custom_rank).all()
+    players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank).all()
     swap_rank_form = SwapRankForm()
     return render_template('draft.html', players=players, swap_rank_form=swap_rank_form)
 
