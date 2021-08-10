@@ -158,7 +158,8 @@
 
 	function draft() {
 		draft_is_occuring = true
-		draft_pos = document.getElementById("draft_pos").value
+		select = document.getElementById("draft_pos")
+		draft_pos = select.options[select.selectedIndex].value;
 		document.getElementById('team-' + draft_pos).getElementsByTagName("p")[0].innerHTML = "Your team"
 
 		draft_btns = document.getElementsByClassName("btn btn-outline btn-outline-primary btn-sm")
@@ -187,7 +188,7 @@
 			}
 		}
 	}
-	
+
 	function reset_draft() {
 		location.reload()
 	}
