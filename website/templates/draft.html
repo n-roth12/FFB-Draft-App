@@ -10,7 +10,24 @@
    	<h1 class="display-4 font-weight-normal" style="color: white">Draft Helper</h1>
    	<br>
    	<form class="form-group row">
-   		<div class="col-1 offset-5">
+   		<div class="col-1 offset-4">
+   			<label for="draft_pos" style="color:white">Choose a Draft Position</label>
+   			<select name="draft_pos" id="draft_pos" class="form-control">
+   				<option value=1>1</option>
+   				<option value=2>2</option>
+   				<option value=3>3</option>
+   				<option value=4>4</option>
+   				<option value=5>5</option>
+   				<option value=6>6</option>
+   				<option value=7>7</option>
+   				<option value=8>8</option>
+   				<option value=1>9</option>
+   				<option value=10>10</option>
+   				<option value=11>11</option>
+   				<option value=12>12</option>
+   			</select>
+   		</div>
+   		<div class="col-1">
    			<label for="num_teams" style="color:white;">Choose number of teams:</label>
    			<select name="num_teams" id="num_teams" class="form-control">
    				<option value=8>8</option>
@@ -69,7 +86,7 @@
 				<h2 class="text-center">Draft Board</h2>
 				<tr class="row">
 				{% for i in range(12) %}
-					<td class="col">
+					<td class="col" id="team-{{ i + 1 }}">
 						<p>Team {{i + 1}}</p>
 					</td>
 				{% endfor %}
@@ -81,7 +98,8 @@
 				<tr class="row">
 					{% for j in range(12) %}
 						<td class="col card draft-card" id="rd{{i + 1}}-pk{{ (j + 1 - (13 * (i % 2)))|abs }}">
-							<p>{{i + 1}}.{{(j + 1 - (13 * (i % 2)))|abs}}</p>
+							<p class="pick-placeholder">{{i + 1}}.{{(j + 1 - (13 * (i % 2)))|abs}}</p>
+							<p class="pick-name hidden"></p>
 						</td>
 					{% endfor %}
 				</tr>
@@ -135,11 +153,14 @@
 	}
 
 	var draft_is_occuring = false
+	var round = 1
+	var pick = 1
 
 	function draft() {
 		draft_is_occuring = true
-		var round = 1
-		var pick = 1
+		draft_pos = document.getElementById("draft_pos").value
+		document.getElementById('team-' + draft_pos).getElementsByTagName("p")[0].innerHTML = "Your team"
+
 		draft_btns = document.getElementsByClassName("btn btn-outline btn-outline-primary btn-sm")
 		for (var i = 0; i < draft_btns.length; i++) {
 			draft_btns[i].classList.remove("hidden")
@@ -153,7 +174,10 @@
 				player_id = this.value
 				player_row = document.getElementById(player_id + "-row")
 				player_row.classList.add("hidden")
-				document.getElementById("rd" + round + "-pk" + pick).innerHTML = player_row.getElementsByClassName("name")[0].innerHTML
+				pick_card = document.getElementById("rd" + round + "-pk" + pick)
+				pick_card.getElementsByClassName("pick-placeholder")[0].classList.add("hidden")
+				pick_card.getElementsByClassName("pick-name")[0].innerHTML = player_row.getElementsByClassName("name")[0].innerHTML
+				pick_card.getElementsByClassName("pick-name")[0].classList.remove("hidden")   
 				if (pick >= 12) {
 					pick = 1
 					round++
@@ -162,19 +186,11 @@
 				}
 			}
 		}
-
 	}
 	
 	function reset_draft() {
-		draft_is_occuring = false
-		player_rows = document.getElementsByClassName("player-row")
-		for (var i = 0; i < player_rows.length; i++) {
-			player_rows[i].classList.remove("hidden")
-		}
-		document.getElementById("start-btn").classList.remove("hidden")
-		document.getElementById("reset-btn").classList.add("hidden")
+		location.reload()
 	}
-
 
 </script>
 
