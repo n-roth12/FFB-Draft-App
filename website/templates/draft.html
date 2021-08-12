@@ -133,7 +133,15 @@
 				</tr>
 			</thead>
 			<tbody>
+				{% set counter = [0] %}
 				{% for player in players %}
+					{% if player.custom_tier > counter|last %}
+						<tr class="tier-row">
+							<td>Tier {{ player.custom_tier }}</td>
+						</tr>
+					{% endif %}
+					{% if counter.append(player.custom_tier) %}
+					{% endif %}
 					<tr class="player-row" id="{{ player[0].id }}-row">
 						<td>{{ player.custom_rank }}</td>
 						<td class="text-left name">{{ player[0].name }}, {{ player[0].position }}</td>
@@ -212,19 +220,19 @@
 	}
 
 	.QB {
-		background-color: #c402a7;
+		background-color: #C402A7;
 	}
 
 	.RB {
-		background-color: #0042e8;
+		background-color: #526EFF;
 	}
 
 	.WR {
-		background-color: #00ad23;
+		background-color: #699D4C;
 	}
 
 	.TE {
-		background-color: #fd4a22;
+		background-color: #C0392B;
 	}
 
 	.advice-bar {

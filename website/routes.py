@@ -35,18 +35,26 @@ def rankings_page():
     swap_rank_form = SwapRankForm()
     add_tier_form = AddTierForm()
 
-    if request.method == "POST":
+    if swap_rank_form.is_submitted():
         if swap_rank_form.validate_on_submit():
             swapped_player_id = request.form.get('swapped_player')
             new_rank = request.form.get('new_rank')
             player1_object = Rank.query.filter_by(user_id=current_user.id, player_id=swapped_player_id).first()
             player2_object = Rank.query.filter_by(user_id=current_user.id, custom_rank=new_rank).first()
+            new_tier = player2_object.custom_tier
+            old_tier = player1_object.custom_tier
             old_rank = player1_object.custom_rank
             player1_object.custom_rank = new_rank
             player2_object.custom_rank = old_rank
+            player1_object.custom_tier = new_tier
+            player2_object.custom_tier = old_tier
             db.session.commit()
+        elif swap_rank_form.errors != {}:
+            for err_msg in swap_rank_form.errors.values():
+                flash(f'There was an error with swapping ranks {err_msg}', category='danger')
 
-        elif add_tier_form.validate_on_submit():
+    if add_tier_form.is_submitted():
+        if add_tier_form.validate_on_submit():
             new_tier = add_tier_form.new_tier.data
             new_tier_cutoff = add_tier_form.new_tier_cutoff.data
             players_to_adjust = db.session.query(Rank).filter(Rank.user_id == current_user.id, Rank.custom_rank >= new_tier_cutoff).all()
@@ -55,7 +63,7 @@ def rankings_page():
                 db.session.commit()        
             flash(f'You successfully added a new tier {new_tier}', category='success')
 
-        if add_tier_form.errors != {}:
+        elif add_tier_form.errors != {}:
             for err_msg in add_tier_form.errors.values():
                 flash(f'There was an error with creating a new tier {err_msg}', category='danger')
     
@@ -145,7 +153,7 @@ def logout_page():
 
 @app.route('/draft')
 def draft_page():
-    players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank).all()
+    players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank).all()
     swap_rank_form = SwapRankForm()
     return render_template('draft.html', players=players, swap_rank_form=swap_rank_form)
 

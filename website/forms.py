@@ -35,13 +35,13 @@ class SwapRankForm(FlaskForm):
 	submit = SubmitField(label='Submit Rank Change')
 
 class AddTierForm(FlaskForm):
-	def validate_max_tier_cutoff(self, cutoff_to_check):
+	def validate_new_tier_cutoff(self, new_tier_cutoff_to_check):
 		players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank).all()
 		max_tier = players[-1].custom_tier
 		max_tier_cutoff = db.session.query(Rank.custom_rank).filter(Rank.custom_tier == max_tier, Rank.user_id == current_user.id).order_by(Rank.custom_rank).first().custom_rank
-		if int(cutoff_to_check) > len(players):
+		if new_tier_cutoff_to_check.data > len(players):
 			raise ValidationError('Must enter the rank of a ranked player!')
-		elif cutoff_to_check <= max_tier_cutoff:
+		elif new_tier_cutoff_to_check.data <= max_tier_cutoff:
 			raise ValidationError('New tier must be lower than existing tiers!')
 
 	new_tier = IntegerField(label='New Tier', validators=[DataRequired()])
