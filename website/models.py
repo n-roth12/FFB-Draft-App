@@ -11,6 +11,7 @@ class Rank(db.Model):
     user_id = db.Column(db.Integer())
     player_id = db.Column(db.Integer())
     custom_rank = db.Column(db.Integer())
+    custom_tier = db.Column(db.Integer())
 
 class Player(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
@@ -22,7 +23,6 @@ class Player(db.Model):
     fp_rank = db.Column(db.Integer())
     ffb_calc_rank = db.Column(db.Integer())
     sport_news_rank = db.Column(db.Integer())
-    overall_tier = db.Column(db.Integer())
     position_rank = db.Column(db.Integer())
 
     def __repr__(self):
@@ -33,6 +33,18 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(length=30), nullable=False, unique=True)
     email_address = db.Column(db.String(length=50), nullable=False, unique=True)
     password_hash = db.Column(db.String(length=60), nullable=False)
+    """tier1_cutoff = db.Column(db.Integer(), nullable=False)
+    tier2_cutoff = db.Column(db.Integer())
+    tier3_cutoff = db.Column(db.Integer())
+    tier4_cutoff = db.Column(db.Integer())
+    tier5_cutoff = db.Column(db.Integer())
+    tier6_cutoff = db.Column(db.Integer())
+    tier7_cutoff = db.Column(db.Integer())
+    tier8_cutoff = db.Column(db.Integer())
+    tier9_cutoff = db.Column(db.Integer())
+    tier10_cutoff = db.Column(db.Integer())
+    tier11_cutoff = db.Column(db.Integer())
+    tier12_cutoff = db.Column(db.Integer())"""
     
     @property
     def password(self):

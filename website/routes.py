@@ -1,7 +1,7 @@
 from website import app
 from flask import render_template, redirect, url_for, flash, request
 from website.models import Player, User, Rank
-from website.forms import RegisterForm, LoginForm, SwapRankForm 
+from website.forms import RegisterForm, LoginForm, SwapRankForm, AddTierForm
 from website import db
 from flask_login import login_user, logout_user, login_required, current_user
 from selenium import webdriver
@@ -33,6 +33,7 @@ def scrape_route():
 @login_required
 def rankings_page():
     swap_rank_form = SwapRankForm()
+    add_tier_form = AddTierForm()
 
     if request.method == "POST":
         if swap_rank_form.validate_on_submit():
@@ -45,12 +46,22 @@ def rankings_page():
             player2_object.custom_rank = old_rank
             db.session.commit()
 
-            flash('You swapped rank !', category='success')
-        else:
-            flash('Please enter the rank of a player! ', category='danger')
+        elif add_tier_form.validate_on_submit():
+            new_tier = add_tier_form.new_tier.data
+            new_tier_cutoff = add_tier_form.new_tier_cutoff.data
+            players_to_adjust = db.session.query(Rank).filter(Rank.user_id == current_user.id, Rank.custom_rank >= new_tier_cutoff).all()
+            for player_rank in players_to_adjust:
+                player_rank.custom_tier = new_tier
+                db.session.commit()        
+            flash(f'You successfully added a new tier {new_tier}', category='success')
 
-    players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank).all()
-    return render_template('rankings.html', players=players, swap_rank_form=swap_rank_form)
+        if add_tier_form.errors != {}:
+            for err_msg in add_tier_form.errors.values():
+                flash(f'There was an error with creating a new tier {err_msg}', category='danger')
+    
+    players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank).all()
+    max_tier = players[-1].custom_tier
+    return render_template('rankings.html', players=players, swap_rank_form=swap_rank_form, max_tier=max_tier, add_tier_form=add_tier_form)
 
 @app.route('/rankings/qb', methods=['GET', 'POST'])
 @login_required
@@ -96,7 +107,7 @@ def register_page():
         db.session.add(user_to_create)
         db.session.commit()
         for player in players:
-            rank = Rank(user_id=user_to_create.id, player_id=player.id, custom_rank=player.rank)
+            rank = Rank(user_id=user_to_create.id, player_id=player.id, custom_rank=player.rank, custom_tier=1)
             db.session.add(rank)
             db.session.commit()
 

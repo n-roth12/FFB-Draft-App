@@ -11,15 +11,13 @@
 	   </div>
 	</div>
 	<div class="text-center row">
-		<p style=""class="col">Filter By Position: <a class="btn btn-dark" href="{{ url_for('rankings_page') }}">All</a> | <a href="{{ url_for('qb_rankings_page') }}">QB</a> | <a href="{{ url_for('rb_rankings_page') }}">RB</a> | <a href="{{ url_for('wr_rankings_page') }}">WR</a> | <a href="{{ url_for('te_rankings_page') }}">TE</a> 
+		<p style=""class="col">Filter By Position: <a href="{{ url_for('rankings_page') }}">All</a> | <a href="{{ url_for('qb_rankings_page') }}">QB</a> | <a href="{{ url_for('rb_rankings_page') }}">RB</a> | <a href="{{ url_for('wr_rankings_page') }}">WR</a> | <a href="{{ url_for('te_rankings_page') }}">TE</a> 
 		</p>
-		<!-- Inactive search bar
-		<div class="col" id="search-container">
-			<form action="">
-				<label for="player">Search for a player</label>
-				<input type="text" id="search-player" name="search-player" placeholder="Search:">
-			</form>
-		</div>-->
+	</div>
+	<div class="row">
+		<div class="col text-center">
+			<button class="btn btn-outline-primary" data-toggle="modal" data-target="#Modal-AddTier-{{ max_tier }}">Add Tier</button>
+		</div>
 	</div>
 	<div class="text-center container">
 		<form method="POST" class="save-changes">
@@ -30,12 +28,12 @@
 	<table class="table table-hover table-striped table-sm table-dark" style="width:60%; margin-left:auto; margin-right:auto; background-color: #1D2228">
 		<thead>
 			<tr>
-				<th scope="col" class="text-center">Rank</th>
+				<th scope="col" class="text-center">Custom Rank</th>
 				<th scope="col" class="text-center">Name</th>
 				<th scope="col" class="text-center">Position</th>
 				<th scope="col" class="text-center">Team</th>
 				<th scope="col" class="text-center">ADP</th>
-				<th scope="col" class="text-center">Fantasy Pros</th>
+				<th scope="col" class="text-center">Custom Tier</th>
 				<th scope="col" class="text-center">FFB Calculator</th>
 				<th scope="col" class="text-center">Sporting News</th>
 				<th scope="col" class="text-center">Options</th>
@@ -55,7 +53,7 @@
 					<td class="text-center">{{ player[0].position }} {{ player[0].position_rank }}</td>
 					<td class="text-center">{{ player[0].team }}</td>
 					<td class="text-center">{{ player[0].adp }}</td>
-					<td class="text-center">{{ player[0].fp_rank }}</td>
+					<td class="text-center">{{ player.custom_tier }}</td>
 					<td class="text-center">{{ player[0].ffb_calc_rank }}</td>
 					<td class="text-center">{{ player[0].sport_news_rank }}</td>
 					<td class="text-center">
@@ -71,6 +69,7 @@
 	</table>
 
 	<script>
+
 		addListeners();
 
 		var selected_player1;

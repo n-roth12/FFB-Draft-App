@@ -37,7 +37,7 @@
    				<option value=12>12</option>
    			</select>
    		</div>
-   		<div class="col-1">
+   		<div class="col-2">
    			<label for="draft_type" style="color:white;">Choose a draft type:</label>
    			<select name="draft_type" id="draft_type" class="form-control">
    				<option value="snake">Snake</option>
@@ -50,6 +50,75 @@
    </div>
 </div>
 
+<div class="container advice-bar">
+	<h2>Your top ranks at each position:</h1>
+	<div class="row">
+		<div class="col">
+			<h4>QB:</h4>
+			<p>Patrick Mahomes</p>
+		</div>
+		<div class="col">
+			<h4>RB:</h4>
+			<p>Christian McCaffery</p>
+		</div>
+		<div class="col">
+			<h4>WR:</h4>
+			<p>Devante Adams</p>
+		</div>
+		<div class="col">
+			<h4>TE:</h4>
+			<p>Travis Kelce</p>
+		</div>
+	</div>
+</div>
+
+<div class="container advice-bar">
+	<h2>Your values at each position:</h1>
+	<div class="row">
+		<div class="col">
+			<h4>QB:</h4>
+			<p>Tom Brady</p>
+		</div>
+		<div class="col">
+			<h4>RB:</h4>
+			<p>Antonio Gibson</p>
+		</div>
+		<div class="col">
+			<h4>WR:</h4>
+			<p>Keenan Allen</p>
+		</div>
+		<div class="col">
+			<h4>TE:</h4>
+			<p>Tyler Higbee</p>
+		</div>
+	</div>
+</div>
+
+<div class="container advice-bar">
+	<h2>Available Tiers:</h1>
+	<div class="row">
+		<div class="col">
+			<h4>QB: Tier 1</h4>
+			<p>Patrick Mahomes</p>
+			<p>Josh Allen</p>
+		</div>
+		<div class="col">
+			<h4>RB: Tier 1</h4>
+			<p>Christian McCaffery</p>
+			<p>Dalvin Cook</p>
+		</div>
+		<div class="col">
+			<h4>WR: Tier 1</h4>
+			<p>Devante Adams</p>
+			<p>Tyreek Hill</p>
+		</div>
+		<div class="col">
+			<h4>TE: Tier 1</h4>
+			<p>Travis Kelce</p>
+		</div>
+	</div>
+</div>
+
 <div class="row mt-5">
 
 	<div class="col-sm-3">
@@ -58,21 +127,19 @@
 				<h2 class="text-center">Draftable Players</h2>
 				<tr>
 					<th scope="col" class="text-center">Your Rank</th>
-					<th scope="col" class="text-center">Name</th>
-					<th scope="col" class="text-center">Position</th>
+					<th scope="col" class="text-center"></th>
 					<th scope="col" class="text-center">ADP</th>
-					<th scope="col" class="text-center options-col">Options</th>
+					<th scope="col" class="text-center options-col"></th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for player in players %}
 					<tr class="player-row" id="{{ player[0].id }}-row">
-						<td class="text-center">{{ player.custom_rank }}</td>
-						<td class="text-center name">{{ player[0].name }}</td>
-						<td class="text-center">{{ player[0].position }}</td>
-						<td class="text-center">{{ player[0].adp }}
+						<td>{{ player.custom_rank }}</td>
+						<td class="text-left name">{{ player[0].name }}, {{ player[0].position }}</td>
+						<td>{{ player[0].adp }}
 						<td class="text-center options-col">
-							<button class="btn btn-outline btn-outline-primary btn-sm" value="{{ player[0].id }}">Draft</button>
+							<button class="btn btn-outline-primary btn-sm draft-btn hidden" value="{{ player[0].id }}">Draft</button>
 						</td>
 					</tr>
 				{% endfor %}
@@ -80,7 +147,7 @@
 		</table>
 	</div>
 
-	<div class="col-sm-7">
+	<div class="col-sm-9">
 		<table class="draft-board">
 			<thead>
 				<h2 class="text-center">Draft Board</h2>
@@ -99,7 +166,7 @@
 					{% for j in range(12) %}
 						<td class="col card draft-card" id="rd{{i + 1}}-pk{{ (j + 1 - (13 * (i % 2)))|abs }}">
 							<p class="pick-placeholder">{{i + 1}}.{{(j + 1 - (13 * (i % 2)))|abs}}</p>
-							<p class="pick-name hidden"></p>
+							<p class="pick-name hidden font-weight-bold text-left" style="margin:-5px; padding:-5px;"></p>
 						</td>
 					{% endfor %}
 				</tr>
@@ -114,7 +181,7 @@
 <style>
 	.card {
 		height: 70px;
-		width: 100px;
+		width: 110px;
 		background-color: #A9A9A9; 
 		color: #E1E2E2;
 		text-align: center;
@@ -143,6 +210,34 @@
 	.hidden {
 		display: None;
 	}
+
+	.QB {
+		background-color: #c402a7;
+	}
+
+	.RB {
+		background-color: #0042e8;
+	}
+
+	.WR {
+		background-color: #00ad23;
+	}
+
+	.TE {
+		background-color: #fd4a22;
+	}
+
+	.advice-bar {
+		border: 3px solid grey;
+		border-radius: 5px;
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+
+	.advice-bar p {
+		color: black;
+	}
+
 </style>
 
 <script>
@@ -162,28 +257,33 @@
 		draft_pos = select.options[select.selectedIndex].value;
 		document.getElementById('team-' + draft_pos).getElementsByTagName("p")[0].innerHTML = "Your team"
 
-		draft_btns = document.getElementsByClassName("btn btn-outline btn-outline-primary btn-sm")
+		draft_btns = document.getElementsByClassName("draft-btn")
 		for (var i = 0; i < draft_btns.length; i++) {
 			draft_btns[i].classList.remove("hidden")
 			draft_btns[i].addEventListener("click", draft_player)
+			draft_btns[i].classList.remove("hidden")
 		}
-		document.getElementById("reset-btn").classList.remove("hidden")
-		document.getElementById("start-btn").classList.add("hidden")
+		document.getElementById("reset-btn").classList.remove("hidden");
+		document.getElementById("start-btn").classList.add("hidden");
 
 		function draft_player() {
 			if (draft_is_occuring  == true) {
-				player_id = this.value
-				player_row = document.getElementById(player_id + "-row")
-				player_row.classList.add("hidden")
-				pick_card = document.getElementById("rd" + round + "-pk" + pick)
-				pick_card.getElementsByClassName("pick-placeholder")[0].classList.add("hidden")
-				pick_card.getElementsByClassName("pick-name")[0].innerHTML = player_row.getElementsByClassName("name")[0].innerHTML
-				pick_card.getElementsByClassName("pick-name")[0].classList.remove("hidden")   
+				player_id = this.value;
+				player_row = document.getElementById(player_id + "-row");
+				player_row.classList.add("hidden");
+				pick_card = document.getElementById("rd" + round + "-pk" + pick);
+				pick_card.getElementsByClassName("pick-placeholder")[0].classList.add("hidden");
+				name_pos = player_row.getElementsByClassName("name")[0].innerHTML.split(", ");
+				name = name_pos[0];
+				pos = name_pos[1];
+				pick_card.classList.add(pos);
+				pick_card.getElementsByClassName("pick-name")[0].innerHTML = name;
+				pick_card.getElementsByClassName("pick-name")[0].classList.remove("hidden");   
 				if (pick >= 12) {
-					pick = 1
-					round++
+					pick = 1;
+					round++;
 				} else {
-					pick++
+					pick++;
 				}
 			}
 		}

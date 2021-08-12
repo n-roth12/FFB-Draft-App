@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, IntegerField
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError, NumberRange
-from website.models import User, Player
+from website.models import User, Player, Rank
+from flask_login import current_user
+from website import db
 
 class RegisterForm(FlaskForm):
 	# flask will search for functions with name starting with validate_<some field>
@@ -31,5 +33,23 @@ class SwapRankForm(FlaskForm):
 	num_players = len(Player.query.all())
 	new_rank= IntegerField(label='Old Player Rank', validators=[DataRequired(), NumberRange(1, num_players - 1)])
 	submit = SubmitField(label='Submit Rank Change')
+
+class AddTierForm(FlaskForm):
+	def validate_max_tier_cutoff(self, cutoff_to_check):
+		players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank).all()
+		max_tier = players[-1].custom_tier
+		max_tier_cutoff = db.session.query(Rank.custom_rank).filter(Rank.custom_tier == max_tier, Rank.user_id == current_user.id).order_by(Rank.custom_rank).first().custom_rank
+		if int(cutoff_to_check) > len(players):
+			raise ValidationError('Must enter the rank of a ranked player!')
+		elif cutoff_to_check <= max_tier_cutoff:
+			raise ValidationError('New tier must be lower than existing tiers!')
+
+	new_tier = IntegerField(label='New Tier', validators=[DataRequired()])
+	new_tier_cutoff = IntegerField(label='New Tier Cutoff', validators=[DataRequired()])
+	submit = SubmitField(label='Add Tier')
+
+
+
+
 
 
