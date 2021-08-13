@@ -154,8 +154,14 @@ def logout_page():
 @app.route('/draft')
 def draft_page():
     players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank).all()
+    values = db.session.query(Player, Rank.custom_rank, Rank.custom_rank - Player.adp).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank - Player.adp).all()
+    qbs = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == "QB").order_by(Rank.custom_rank).all()
+    rbs = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == "RB").order_by(Rank.custom_rank).all()
+    wrs = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == "WR").order_by(Rank.custom_rank).all()
+    tes = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == "TE").order_by(Rank.custom_rank).all()
+    print(values[0])
     swap_rank_form = SwapRankForm()
-    return render_template('draft.html', players=players, swap_rank_form=swap_rank_form)
+    return render_template('draft.html', players=players, values=values, qbs=qbs, rbs=rbs, wrs=wrs, tes=tes, swap_rank_form=swap_rank_form)
 
 
 def scrape():

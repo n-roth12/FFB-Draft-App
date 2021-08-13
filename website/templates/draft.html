@@ -51,23 +51,23 @@
 </div>
 
 <div class="container advice-bar">
-	<h2>Your top ranks at each position:</h1>
+	<h2>Top Players at Each Position:</h1>
 	<div class="row">
 		<div class="col">
-			<h4>QB:</h4>
-			<p>Patrick Mahomes</p>
+			<h4>QB: Tier {{ qbs[0].custom_tier }}</h4>
+			<p>{{ qbs[0][0].name }}, Your #{{ qbs[0].custom_rank }}</p>
 		</div>
 		<div class="col">
-			<h4>RB:</h4>
-			<p>Christian McCaffery</p>
+			<h4>RB: Tier {{ rbs[0].custom_tier }}</h4>
+			<p>{{ rbs[0][0].name }}, Your #{{ rbs[0].custom_rank }}</p>
 		</div>
 		<div class="col">
-			<h4>WR:</h4>
-			<p>Devante Adams</p>
+			<h4>WR: Tier {{ wrs[0].custom_tier }}</h4>
+			<p>{{ wrs[0][0].name}}, Your #{{ wrs[0].custom_rank }}</p>
 		</div>
 		<div class="col">
-			<h4>TE:</h4>
-			<p>Travis Kelce</p>
+			<h4>TE: Tier {{ tes[0].custom_tier }}</h4>
+			<p>{{ tes[0][0].name }}, Your #{{ tes[0].custom_rank }}</p>
 		</div>
 	</div>
 </div>
@@ -76,45 +76,20 @@
 	<h2>Your values at each position:</h1>
 	<div class="row">
 		<div class="col">
-			<h4>QB:</h4>
-			<p>Tom Brady</p>
+			<h4>#1:</h4>
+			<p>{{ values[0][0].name }}, Value: {{ values[0][2] }}</p>
 		</div>
 		<div class="col">
-			<h4>RB:</h4>
-			<p>Antonio Gibson</p>
+			<h4>#2:</h4>
+			<p>{{ values[1][0].name }}, Value: {{ values[1][2] }}</p>
 		</div>
 		<div class="col">
-			<h4>WR:</h4>
-			<p>Keenan Allen</p>
+			<h4>#3:</h4>
+			<p>{{ values[2][0].name }}, Value: {{ values[2][2] }}</p>
 		</div>
 		<div class="col">
-			<h4>TE:</h4>
-			<p>Tyler Higbee</p>
-		</div>
-	</div>
-</div>
-
-<div class="container advice-bar">
-	<h2>Available Tiers:</h1>
-	<div class="row">
-		<div class="col">
-			<h4>QB: Tier 1</h4>
-			<p>Patrick Mahomes</p>
-			<p>Josh Allen</p>
-		</div>
-		<div class="col">
-			<h4>RB: Tier 1</h4>
-			<p>Christian McCaffery</p>
-			<p>Dalvin Cook</p>
-		</div>
-		<div class="col">
-			<h4>WR: Tier 1</h4>
-			<p>Devante Adams</p>
-			<p>Tyreek Hill</p>
-		</div>
-		<div class="col">
-			<h4>TE: Tier 1</h4>
-			<p>Travis Kelce</p>
+			<h4>#4:</h4>
+			<p>{{ values[3][0].name }}, Value: {{ values[3][2] }}</p>
 		</div>
 	</div>
 </div>
