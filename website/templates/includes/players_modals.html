@@ -49,6 +49,7 @@
 					{{ swap_rank_form.new_rank(class="form-control", placeholder="New Rank") }}
 					<br>
 					<input id="swapped_player" name="swapped_player" type="hidden" value="{{ player[0].id }}">
+					<input type="hidden" name="form-name" value="swap-form">
 					{{ swap_rank_form.submit(class="btn btn-outline-success btn-block") }}
 				</form>
 			</div>
@@ -83,6 +84,7 @@
 					{{ add_tier_form.new_tier_cutoff(class="form-control", placeholder="Top Rank ") }}
 					<br>
 					<input id="new_tier" name="new_tier" type="hidden" value="{{ max_tier + 1 }}">
+					<input type="hidden" name="form-name" value="tier-form">
 					{{ add_tier_form.submit(class="btn btn-outline-success btn-block") }}
 				</form>
 			</div>
