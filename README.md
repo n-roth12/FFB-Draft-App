@@ -20,3 +20,5 @@ the maximum current tier, and all players below the rank specified will be place
 The purpose of this page is to be a companion app for the user while they are participating in a live fantasy football draft. The user will select how many teams
 are in the draft, the draft type, and which posiiton they are drafting at. Then they will select what player is drafted at each draft spot, and they will
 be given updated information about available draft chooses based on their custom tiers and rankings. 
+
+##### Tools and Technologies: Python, Flask, SQLite, SQLAlchemy, HTML, CSS, Javascript
