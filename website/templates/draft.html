@@ -225,17 +225,24 @@
 
 <script>
 
+
 	window.addEventListener("load", initialize)
 
 	function initialize() {
 	}
 
-	var draft_is_occuring = false
-	var round = 1
-	var pick = 1
+	var ids_set = new Set()
+	for (var i = 0; i < {{ ids }}.length; i++) {
+		ids_set.add({{ ids }}[i][0])
+	}
+	console.log(ids_set)
+	var draft_is_occuring = false;
+	var round = 1;
+	var pick = 1;
 
 	function draft() {
-		draft_is_occuring = true
+		draft_is_occuring = true;
+		var active_ids = ids_set;
 		select = document.getElementById("draft_pos")
 		draft_pos = select.options[select.selectedIndex].value;
 		document.getElementById('team-' + draft_pos).getElementsByTagName("p")[0].innerHTML = "Your team"
@@ -252,6 +259,7 @@
 		function draft_player() {
 			if (draft_is_occuring  == true) {
 				player_id = this.value;
+				active_ids.delete(player_id)
 				player_row = document.getElementById(player_id + "-row");
 				player_row.classList.add("hidden");
 				pick_card = document.getElementById("rd" + round + "-pk" + pick);
@@ -269,6 +277,10 @@
 					pick++;
 				}
 			}
+		}
+
+		function load_top_ranks() {
+			
 		}
 	}
 

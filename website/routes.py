@@ -6,8 +6,8 @@ from website import db
 from flask_login import login_user, logout_user, login_required, current_user
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+import json
 import re
-# this is a test
 
 @app.route('/')
 @app.route('/home')  
@@ -24,9 +24,17 @@ def scrape_route():
     db.create_all()
     db.session.commit()
     scrape()
+    players = Player.query.order_by('rank').all()
+    return render_template('home.html', players=players)
+
+# This route is meant to be used after the scrape route in order to prevent 
+# unnecessary scraping. It generates the ADPs and position ranks for each player
+# based on the scraped data.
+@app.route('/generate')
+def generate_route():
     generateAdps()
     generatePosRanks()
-    players = Player.query.order_by('rank').all()
+    players = Player.query.order_by('adp').all()
     return render_template('home.html', players=players)
 
 @app.route('/rankings', methods=['GET', 'POST'])
@@ -78,33 +86,41 @@ def rankings_page():
 @login_required
 def qb_rankings_page():
     swap_rank_form = SwapRankForm()
+    add_tier_form = AddTierForm()
 
-    qb_players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).filter(Player.position == 'QB').order_by(Rank.custom_rank).all()
-    return render_template('qb_rankings.html', players=qb_players, swap_rank_form=swap_rank_form)
+    qb_players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == 'QB').order_by(Rank.custom_rank).all()
+    max_qb_tier = qb_players[-1].custom_tier
+    return render_template('qb_rankings.html', players=qb_players, swap_rank_form=swap_rank_form, max_tier=max_qb_tier, add_tier_form=add_tier_form)
 
 @app.route('/rankings/rb', methods=['GET', 'POST'])
 @login_required
 def rb_rankings_page():
     swap_rank_form = SwapRankForm()
+    add_tier_form = AddTierForm()
 
-    rb_players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).filter(Player.position == 'RB').order_by(Rank.custom_rank).all()
-    return render_template('rb_rankings.html', players=rb_players, swap_rank_form=swap_rank_form)
+    rb_players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == 'RB').order_by(Rank.custom_rank).all()
+    max_rb_tier = rb_players[-1].custom_tier
+    return render_template('rb_rankings.html', players=rb_players, swap_rank_form=swap_rank_form, max_tier=max_rb_tier, add_tier_form=add_tier_form)
 
 @app.route('/rankings/wr', methods=['GET', 'POST'])
 @login_required
 def wr_rankings_page():
     swap_rank_form = SwapRankForm()
+    add_tier_form = AddTierForm()
 
-    wr_players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).filter(Player.position == 'RB').order_by(Rank.custom_rank).all()
-    return render_template('wr_rankings.html', players=wr_players, swap_rank_form=swap_rank_form)
+    wr_players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == 'WR').order_by(Rank.custom_rank).all()
+    max_wr_tier = wr_players[-1].custom_tier
+    return render_template('wr_rankings.html', players=wr_players, swap_rank_form=swap_rank_form, max_tier=max_wr_tier, add_tier_form=add_tier_form)
 
 @app.route('/rankings/te', methods=['GET', 'POST'])
 @login_required
 def te_rankings_page():
     swap_rank_form = SwapRankForm()
+    add_tier_form = AddTierForm()
 
-    te_players = db.session.query(Player, Rank.custom_rank).join(Rank, Player.id == Rank.player_id).filter(Player.position == 'TE').order_by(Rank.custom_rank).all()
-    return render_template('te_rankings.html', players=te_players, swap_rank_form=swap_rank_form)
+    te_players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == 'TE').order_by(Rank.custom_rank).all()
+    max_te_tier = te_players[-1].custom_tier
+    return render_template('te_rankings.html', players=te_players, swap_rank_form=swap_rank_form, max_tier=max_te_tier, add_tier_form=add_tier_form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
@@ -162,9 +178,9 @@ def draft_page():
     rbs = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == "RB").order_by(Rank.custom_rank).all()
     wrs = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == "WR").order_by(Rank.custom_rank).all()
     tes = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == "TE").order_by(Rank.custom_rank).all()
-    print(values[0])
-    swap_rank_form = SwapRankForm()
-    return render_template('draft.html', players=players, values=values, qbs=qbs, rbs=rbs, wrs=wrs, tes=tes, swap_rank_form=swap_rank_form)
+    ids = db.session.query(Player.id).all()
+
+    return render_template('draft.html', players=players, values=values, qbs=qbs, rbs=rbs, wrs=wrs, tes=tes, ids=json.dumps(ids))
 
 
 def scrape():
@@ -172,12 +188,12 @@ def scrape():
     opts.add_argument("--headless")
     opts.add_argument("--disable-notifications")
 
-    #fp_scrape(opts)
+    fp_scrape(opts)
     sport_news_scrape(opts)
     ffb_calc_scrape(opts)
 
 def fp_scrape(opts):
-    print('Scraping fantasy pros rankings...')
+    print('Scraping Fantasy Pros rankings...')
 
     driver = webdriver.Chrome('/Users/NolanRoth/Desktop/ProjectWebsite/chromedriver', chrome_options=opts)
     driver.get('https://www.fantasypros.com/nfl/rankings/consensus-cheatsheets.php')
@@ -202,16 +218,20 @@ def fp_scrape(opts):
         fp_ranks.append(rank)
     
     for i in range(len(names)):
-        player =  Player(name=names[i], team=teams[i], position=positions[i], fp_rank=fp_ranks[i])
-        db.session.add(player)
-        db.session.commit()
+        p1 = Player.query.filter_by(name=names[i]).first()
+        if p1 == None:
+            player =  Player(name=names[i], team=teams[i], position=positions[i], fp_rank=fp_ranks[i])
+            db.session.add(player)
+            db.session.commit()
+        else:
+            p1.fp_rank = fp_ranks[i]
+            db.session.commit()
 
-
-    print('Completed scraping fantasy pros ranks!')
+    print('Completed scraping Fantasy Pros rankings!')
     driver.quit()
 
 def ffb_calc_scrape(opts):
-    print('Scraping fantasy football calculator...')
+    print('Scraping Fantasy Football Calculator rankings...')
 
     driver = webdriver.Chrome('/Users/NolanRoth/Desktop/ProjectWebsite/chromedriver', chrome_options=opts)
     driver.get('https://fantasyfootballcalculator.com/rankings/ppr')
@@ -242,6 +262,8 @@ def ffb_calc_scrape(opts):
         p1 = Player.query.filter_by(name=names[i]).first()
         if p1 == None:
             pass
+        # This is being passed right now because some of the websites use different
+        # name abreviations for the same players, causing problems
         #    player =  Player(name=names[i], team=teams[i], position=positions[i], ffb_calc_rank=ffb_calc_ranks[i])
         #    db.session.add(player)
         #    db.session.commit()
@@ -249,7 +271,7 @@ def ffb_calc_scrape(opts):
             p1.ffb_calc_rank = ffb_calc_ranks[i]
             db.session.commit()
 
-    print('Completed scraping fantasy football calculator!')
+    print('Completed scraping Fantasy Football Calculator rankings!')
     driver.quit()
 
 def sport_news_scrape(opts):
@@ -282,15 +304,17 @@ def sport_news_scrape(opts):
     for i in range(len(names)):
         p1 = Player.query.filter_by(name=names[i]).first()
         if p1 == None:
-        #    pass
-            player =  Player(name=names[i], team=teams[i], position=positions[i], sport_news_rank=sport_news_ranks[i])
-            db.session.add(player)
-            db.session.commit()
+            pass
+        # This is being passed right now because some of the websites use different
+        # name abreviations for the same players, causing problems
+        #    player =  Player(name=names[i], team=teams[i], position=positions[i], sport_news_rank=sport_news_ranks[i])
+        #    db.session.add(player)
+        #    db.session.commit()
         else:
             p1.sport_news_rank = sport_news_ranks[i]
             db.session.commit()
 
-    print('Completed scraping sporting news ranks!')
+    print('Completed scraping Sporting News ranksings!')
     driver.quit()
 
 def generateAdps():
@@ -299,6 +323,9 @@ def generateAdps():
     for player in players:
         sum_ranks = 0
         count = 0
+        if player.fp_rank:
+            sum_ranks += player.fp_rank
+            count += 1
         if player.ffb_calc_rank:
             sum_ranks += player.ffb_calc_rank
             count += 1

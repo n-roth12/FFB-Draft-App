@@ -10,6 +10,7 @@ from selenium.webdriver.chrome.options import Options
 app = Flask(__name__, static_folder=os.path.abspath('/Users/NolanRoth/Desktop/ProjectWebsite'))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///rankings.db'
 app.config['SECRET_KEY'] = 'ee0442debd6e5574666cd67a'
+app.jinja_options['extensions'].append('jinja2.ext.do')
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
