@@ -158,37 +158,26 @@
 	</div>
 
 	<div class="col-sm-9">
-		<table class="draft-board">
+		<table id="draft-board">
 			<thead>
 				<h2 class="text-center">Draft Board</h2>
 				<tr class="row">
-				{% for i in range(12) %}
-					<td class="col" id="team-{{ i + 1 }}">
-						<p>Team {{i + 1}}</p>
-					</td>
-				{% endfor %}
 				</tr>
 			</thead>
 
 			<tbody>
-			{% for i in range(15) %}
-				<tr class="row">
-					{% for j in range(12) %}
-						<td class="col card draft-card" id="rd{{i + 1}}-pk{{ (j + 1 - (13 * (i % 2)))|abs }}">
-							<p class="pick-placeholder">{{i + 1}}.{{(j + 1 - (13 * (i % 2)))|abs}}</p>
-							<p class="pick-name hidden font-weight-bold text-left" style="margin:-5px; padding:-5px;"></p>
-						</td>
-					{% endfor %}
-				</tr>
-			{% endfor %}
 			</tbody>
 		</table>
 	</div>
 
 </div>
 
-
 <style>
+	.pick-name {
+		margin: -5px;
+		padding: -5px;
+	}
+
 	.card {
 		height: 70px;
 		width: 110px;
@@ -252,7 +241,11 @@
 		scroll-behavior: smooth;
 	}
 
+	.user-thead {
+		font-weight: bold;
+	}
 </style>
+
 <script>
 
 	window.addEventListener("load", initialize)
@@ -300,9 +293,51 @@
 		// Updating parameters
 		draft_is_occuring = true;
 		var active_ids = ids_set;
-		select = document.getElementById("draft_pos")
-		draft_pos = select.options[select.selectedIndex].value;
-		document.getElementById('team-' + draft_pos).getElementsByTagName("p")[0].innerHTML = "Your team"
+
+		draft_board = document.getElementById('draft-board')
+		draft_pos = document.getElementById("draft_pos").value
+		num_players = document.getElementById("num_teams").value
+
+		drafters_head = draft_board.getElementsByTagName('thead')[0]
+		drafters = drafters_head.getElementsByTagName('tr')[0]
+		for (var i = 0; i < num_players; i ++) {
+			drafter_td = document.createElement('td')
+			drafter_td.classList.add("col")
+			drafter_td.setAttribute("id", "team-" + parseInt(i + 1))
+
+			drafter_p = document.createElement('p')
+			drafter_p.innerHTML = "Team "+ parseInt(i + 1)
+			drafter_td.appendChild(drafter_p)
+
+			drafters.appendChild(drafter_td)
+		}
+
+		cards = draft_board.getElementsByTagName('tbody')[0]
+		for (var i = 0; i < 15; i++) {
+			card_row = document.createElement("tr")
+			card_row.setAttribute("class", "row")
+			for (var j = 0; j < num_players; j++) {
+				card_td = document.createElement('td')
+				card_td.setAttribute("class", "col card draft-card")
+				card_td.setAttribute("id", "rd" + parseInt(i + 1) + "-pk" + Math.abs(parseInt(j + 1) - (parseInt(parseInt(num_players) + 1) * (i % 2))))
+				card_placeholder = document.createElement("p")
+				card_placeholder.setAttribute("class", "pick-placeholder")
+				placeholder_num = Math.abs(parseInt(j + 1) - (parseInt(parseInt(num_players) + 1) * (i % 2)))
+				card_placeholder.innerHTML = "" + parseInt(i + 1) + "." + placeholder_num
+				card_td.appendChild(card_placeholder)
+
+				card_name = document.createElement("p")
+				card_name.setAttribute("class", "pick-name hidden font-weight-bold text-left")
+				card_td.appendChild(card_name)
+
+				card_row.appendChild(card_td)
+			}
+			cards.appendChild(card_row)
+		}
+
+		user_thead = document.getElementById('team-' + draft_pos)
+		user_thead.getElementsByTagName("p")[0].innerHTML = "Your team"
+		user_thead.setAttribute("class", "user-thead")
 
 		// Activating draft buttons for players
 		draft_btns = document.getElementsByClassName("draft-btn")
