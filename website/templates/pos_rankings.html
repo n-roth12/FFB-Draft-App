@@ -36,19 +36,12 @@
 					<th scope="col" class="text-center">Fantasy Pros</th>
 					<th scope="col" class="text-center">FFB Calculator</th>
 					<th scope="col" class="text-center">Sporting News</th>
-					<th scope="col" class="text-center">Options</th>
+					<th scope="col" class="text-center"></th>
 				</tr>
 			</thead>
 			<tbody>
-				{% set tiers = [] %}
 				{% for player in players %}
 				{% include 'includes/pos_player_modals.html' %}
-					{% if tiers|length < 1 or player.custom_tier != tiers[-1] %}
-						{% do tiers.append(player.custom_tier) %}
-						<tr>
-							<td class="bg-secondary">Tier {{ player.custom_tier }}  <a href="#">Edit Tier</a></td>
-						</tr>
-					{% endif %}
 					<tr class="player-row" id="{{ player.id }}-row">
 						<td class="text-center custom-rank" form="player-form">{{ player.custom_pos_rank }}</td>
 						<td class="text-center">{{ player[0].name }}</td>
@@ -58,7 +51,7 @@
 						<td class="text-center">{{ player[0].ffb_calc_rank }}</td>
 						<td class="text-center">{{ player[0].sport_news_rank }}</td>
 						<td class="text-center">
-								<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapPosRank-{{ player[0].id }}">Swap</button>
+								<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapPosRank-{{ player[0].id }}">Change</button>
 						</td>
 					</tr>
 				{% endfor %}

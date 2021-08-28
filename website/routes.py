@@ -51,7 +51,8 @@ def rankings_page():
             if swap_rank_form.validate_on_submit():
                 swapped_player_id = request.form.get('swapped_player')
                 new_rank = int(request.form.get('new_rank'))
-                player1_object = Rank.query.filter_by(user_id=current_user.id, player_id=swapped_player_id).first()
+                player1_object = Rank.query.filter_by(
+                    user_id=current_user.id, player_id=swapped_player_id).first()
 
                 # This triggers when there is no rank change, so nothing needs to happen
                 if new_rank == player1_object.custom_rank:
@@ -60,7 +61,11 @@ def rankings_page():
                 # This triggers when the swapped player is being moved down in the rankings (to a larger rank number)
                 elif new_rank > player1_object.custom_rank:
                     pos_rank_changes = []
-                    above_players = db.session.query(Rank).filter(Rank.user_id==current_user.id, Rank.custom_rank <= new_rank, Rank.custom_rank > player1_object.custom_rank).order_by(Rank.custom_rank).all()
+                    above_players = db.session.query(Rank).filter(
+                        Rank.user_id==current_user.id, 
+                        Rank.custom_rank <= new_rank, 
+                        Rank.custom_rank > player1_object.custom_rank).order_by(
+                        Rank.custom_rank).all()
                     for player in above_players:
                         if player.position == player1_object.position:
                             pos_rank_changes.append(player.custom_pos_rank)
@@ -75,7 +80,11 @@ def rankings_page():
                 # This triggers when the swapped player is being moved up in the rankings (to a smaller rank number)
                 elif new_rank < player1_object.custom_rank:
                     pos_rank_changes = []
-                    below_players = db.session.query(Rank).filter(Rank.user_id==current_user.id, Rank.custom_rank >= new_rank, Rank.custom_rank < player1_object.custom_rank).order_by(Rank.custom_rank).all()
+                    below_players = db.session.query(Rank).filter(
+                        Rank.user_id==current_user.id, 
+                        Rank.custom_rank >= new_rank, 
+                        Rank.custom_rank < player1_object.custom_rank).order_by(
+                        Rank.custom_rank).all()
                     for player in below_players:
                         if player.position == player1_object.position:
                             pos_rank_changes.append(player.custom_pos_rank)
@@ -95,7 +104,9 @@ def rankings_page():
             if add_tier_form.validate_on_submit():
                 new_tier = add_tier_form.new_tier.data
                 new_tier_cutoff = add_tier_form.new_tier_cutoff.data
-                players_to_adjust = db.session.query(Rank).filter(Rank.user_id == current_user.id, Rank.custom_rank >= new_tier_cutoff).all()
+                players_to_adjust = db.session.query(Rank).filter(
+                    Rank.user_id == current_user.id, 
+                    Rank.custom_rank >= new_tier_cutoff).all()
                 for player_rank in players_to_adjust:
                     player_rank.custom_tier = new_tier
                     db.session.commit()        
@@ -105,9 +116,13 @@ def rankings_page():
                 for err_msg in add_tier_form.errors.values():
                     flash(f'There was an error with creating a new tier {err_msg}', category='danger')
     
-    players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Rank.custom_pos_rank).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank).all()
+    players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Rank.custom_pos_rank).join(
+        Rank, Player.id == Rank.player_id).filter(
+        Rank.user_id == current_user.id).order_by(
+        Rank.custom_rank).all()
     max_tier = players[-1].custom_tier
-    return render_template('rankings.html', players=players, swap_rank_form=swap_rank_form, max_tier=max_tier, add_tier_form=add_tier_form)
+    return render_template('rankings.html', players=players, swap_rank_form=swap_rank_form, 
+        max_tier=max_tier, add_tier_form=add_tier_form)
 
 @app.route('/rankings/qb', methods=['GET', 'POST'])
 @login_required
@@ -120,13 +135,17 @@ def qb_rankings_page():
         if form_name == 'pos-swap-form':
             if swap_pos_rank_form.validate_on_submit():
                 swapped_player_id = request.form.get('swapped_player')
-                player1_object = Rank.query.filter_by(user_id=current_user.id, player_id=swapped_player_id).first()
+                player1_object = Rank.query.filter_by(user_id=current_user.id, 
+                    player_id=swapped_player_id).first()
                 new_pos_rank = int(request.form.get('new_pos_rank'))
-                new_rank = db.session.query(Rank).filter(Rank.user_id == current_user.id, Rank.custom_pos_rank == new_pos_rank, Rank.position == player1_object.position).first()
-                print(new_rank.player_id)
+                new_rank = db.session.query(Rank).filter(
+                    Rank.user_id == current_user.id, 
+                    Rank.custom_pos_rank == new_pos_rank, 
+                    Rank.position == player1_object.position).first()
                 new_rank = new_rank.custom_rank
 
-                num_pos_players = len(db.session.query(Player).filter(Player.position == player1_object.position).all())
+                num_pos_players = len(db.session.query(Player).filter(
+                    Player.position == player1_object.position).all())
                 if new_pos_rank > num_pos_players:
                     flash('Please enter a position rank between 1 and ' + str(num_pos_players))
                 else:
@@ -137,7 +156,11 @@ def qb_rankings_page():
                     # This triggers when the swapped player is being moved down in the rankings (to a larger rank number)
                     elif new_pos_rank > player1_object.custom_pos_rank:
                         pos_rank_changes = []
-                        above_players = db.session.query(Rank).filter(Rank.user_id==current_user.id, Rank.custom_rank <= new_rank, Rank.custom_rank > player1_object.custom_rank).order_by(Rank.custom_rank).all()
+                        above_players = db.session.query(Rank).filter(
+                            Rank.user_id==current_user.id, 
+                            Rank.custom_rank <= new_rank, 
+                            Rank.custom_rank > player1_object.custom_rank).order_by(
+                            Rank.custom_rank).all()
                         for player in above_players:
                             if player.position == player1_object.position:
                                 pos_rank_changes.append(player.custom_pos_rank)
@@ -152,7 +175,11 @@ def qb_rankings_page():
                     # This triggers when the swapped player is being moved up in the rankings (to a smaller rank number)
                     elif new_pos_rank < player1_object.custom_pos_rank:
                         pos_rank_changes = []
-                        below_players = db.session.query(Rank).filter(Rank.user_id==current_user.id, Rank.custom_rank >= new_rank, Rank.custom_rank < player1_object.custom_rank).order_by(Rank.custom_rank).all()
+                        below_players = db.session.query(Rank).filter(
+                            Rank.user_id==current_user.id, 
+                            Rank.custom_rank >= new_rank, 
+                            Rank.custom_rank < player1_object.custom_rank).order_by(
+                            Rank.custom_rank).all()
                         for player in below_players:
                             if player.position == player1_object.position:
                                 pos_rank_changes.append(player.custom_pos_rank)
@@ -168,9 +195,14 @@ def qb_rankings_page():
                 for err_msg in swap_pos_rank_form.errors.values():
                     flash(f'There was an error with swapping ranks {err_msg}', category='danger')
 
-    qb_players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Rank.custom_pos_rank).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == 'QB').order_by(Rank.custom_rank).all()
+    qb_players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Rank.custom_pos_rank).join(
+        Rank, Player.id == Rank.player_id).filter(
+        Rank.user_id == current_user.id, 
+        Player.position == 'QB').order_by(
+        Rank.custom_rank).all()
     max_qb_tier = qb_players[-1].custom_tier
-    return render_template('qb_rankings.html', players=qb_players, swap_pos_rank_form=swap_pos_rank_form, max_tier=max_qb_tier, add_tier_form=add_tier_form)
+    return render_template('qb_rankings.html', players=qb_players, swap_pos_rank_form=swap_pos_rank_form, 
+        max_tier=max_qb_tier, add_tier_form=add_tier_form)
 
 @app.route('/rankings/rb', methods=['GET', 'POST'])
 @login_required
@@ -183,13 +215,17 @@ def rb_rankings_page():
         if form_name == 'pos-swap-form':
             if swap_pos_rank_form.validate_on_submit():
                 swapped_player_id = request.form.get('swapped_player')
-                player1_object = Rank.query.filter_by(user_id=current_user.id, player_id=swapped_player_id).first()
+                player1_object = Rank.query.filter_by(user_id=current_user.id, 
+                    player_id=swapped_player_id).first()
                 new_pos_rank = int(request.form.get('new_pos_rank'))
-                new_rank = db.session.query(Rank).filter(Rank.user_id == current_user.id, Rank.custom_pos_rank == new_pos_rank, Rank.position == player1_object.position).first()
-                print(new_rank.player_id)
+                new_rank = db.session.query(Rank).filter(
+                    Rank.user_id == current_user.id, 
+                    Rank.custom_pos_rank == new_pos_rank, 
+                    Rank.position == player1_object.position).first()
                 new_rank = new_rank.custom_rank
 
-                num_pos_players = len(db.session.query(Player).filter(Player.position == player1_object.position).all())
+                num_pos_players = len(db.session.query(Player).filter(
+                    Player.position == player1_object.position).all())
                 if new_pos_rank > num_pos_players:
                     flash('Please enter a position rank between 1 and ' + str(num_pos_players))
                 else:
@@ -200,7 +236,11 @@ def rb_rankings_page():
                     # This triggers when the swapped player is being moved down in the rankings (to a larger rank number)
                     elif new_pos_rank > player1_object.custom_pos_rank:
                         pos_rank_changes = []
-                        above_players = db.session.query(Rank).filter(Rank.user_id==current_user.id, Rank.custom_rank <= new_rank, Rank.custom_rank > player1_object.custom_rank).order_by(Rank.custom_rank).all()
+                        above_players = db.session.query(Rank).filter(
+                            Rank.user_id==current_user.id, 
+                            Rank.custom_rank <= new_rank, 
+                            Rank.custom_rank > player1_object.custom_rank).order_by(
+                            Rank.custom_rank).all()
                         for player in above_players:
                             if player.position == player1_object.position:
                                 pos_rank_changes.append(player.custom_pos_rank)
@@ -215,7 +255,11 @@ def rb_rankings_page():
                     # This triggers when the swapped player is being moved up in the rankings (to a smaller rank number)
                     elif new_pos_rank < player1_object.custom_pos_rank:
                         pos_rank_changes = []
-                        below_players = db.session.query(Rank).filter(Rank.user_id==current_user.id, Rank.custom_rank >= new_rank, Rank.custom_rank < player1_object.custom_rank).order_by(Rank.custom_rank).all()
+                        below_players = db.session.query(Rank).filter(
+                            Rank.user_id==current_user.id, 
+                            Rank.custom_rank >= new_rank, 
+                            Rank.custom_rank < player1_object.custom_rank).order_by(
+                            Rank.custom_rank).all()
                         for player in below_players:
                             if player.position == player1_object.position:
                                 pos_rank_changes.append(player.custom_pos_rank)
@@ -231,9 +275,14 @@ def rb_rankings_page():
                 for err_msg in swap_pos_rank_form.errors.values():
                     flash(f'There was an error with swapping ranks {err_msg}', category='danger')
 
-    rb_players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Rank.custom_pos_rank).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == 'RB').order_by(Rank.custom_rank).all()
+    rb_players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Rank.custom_pos_rank).join(
+        Rank, Player.id == Rank.player_id).filter(
+        Rank.user_id == current_user.id, 
+        Player.position == 'RB').order_by(
+        Rank.custom_rank).all()
     max_rb_tier = rb_players[-1].custom_tier
-    return render_template('rb_rankings.html', players=rb_players, swap_pos_rank_form=swap_pos_rank_form, max_tier=max_rb_tier, add_tier_form=add_tier_form)
+    return render_template('rb_rankings.html', players=rb_players, 
+        swap_pos_rank_form=swap_pos_rank_form, max_tier=max_rb_tier, add_tier_form=add_tier_form)
 
 @app.route('/rankings/wr', methods=['GET', 'POST'])
 @login_required
@@ -246,13 +295,17 @@ def wr_rankings_page():
         if form_name == 'pos-swap-form':
             if swap_pos_rank_form.validate_on_submit():
                 swapped_player_id = request.form.get('swapped_player')
-                player1_object = Rank.query.filter_by(user_id=current_user.id, player_id=swapped_player_id).first()
+                player1_object = Rank.query.filter_by(user_id=current_user.id, 
+                    player_id=swapped_player_id).first()
                 new_pos_rank = int(request.form.get('new_pos_rank'))
-                new_rank = db.session.query(Rank).filter(Rank.user_id == current_user.id, Rank.custom_pos_rank == new_pos_rank, Rank.position == player1_object.position).first()
-                print(new_rank.player_id)
+                new_rank = db.session.query(Rank).filter(
+                    Rank.user_id == current_user.id, 
+                    Rank.custom_pos_rank == new_pos_rank, 
+                    Rank.position == player1_object.position).first()
                 new_rank = new_rank.custom_rank
 
-                num_pos_players = len(db.session.query(Player).filter(Player.position == player1_object.position).all())
+                num_pos_players = len(db.session.query(Player).filter(
+                    Player.position == player1_object.position).all())
                 if new_pos_rank > num_pos_players:
                     flash('Please enter a position rank between 1 and ' + str(num_pos_players))
                 else:
@@ -263,7 +316,11 @@ def wr_rankings_page():
                     # This triggers when the swapped player is being moved down in the rankings (to a larger rank number)
                     elif new_pos_rank > player1_object.custom_pos_rank:
                         pos_rank_changes = []
-                        above_players = db.session.query(Rank).filter(Rank.user_id==current_user.id, Rank.custom_rank <= new_rank, Rank.custom_rank > player1_object.custom_rank).order_by(Rank.custom_rank).all()
+                        above_players = db.session.query(Rank).filter(
+                            Rank.user_id==current_user.id, 
+                            Rank.custom_rank <= new_rank, 
+                            Rank.custom_rank > player1_object.custom_rank).order_by(
+                            Rank.custom_rank).all()
                         for player in above_players:
                             if player.position == player1_object.position:
                                 pos_rank_changes.append(player.custom_pos_rank)
@@ -278,7 +335,11 @@ def wr_rankings_page():
                     # This triggers when the swapped player is being moved up in the rankings (to a smaller rank number)
                     elif new_pos_rank < player1_object.custom_pos_rank:
                         pos_rank_changes = []
-                        below_players = db.session.query(Rank).filter(Rank.user_id==current_user.id, Rank.custom_rank >= new_rank, Rank.custom_rank < player1_object.custom_rank).order_by(Rank.custom_rank).all()
+                        below_players = db.session.query(Rank).filter(
+                            Rank.user_id==current_user.id, 
+                            Rank.custom_rank >= new_rank, 
+                            Rank.custom_rank < player1_object.custom_rank).order_by(
+                            Rank.custom_rank).all()
                         for player in below_players:
                             if player.position == player1_object.position:
                                 pos_rank_changes.append(player.custom_pos_rank)
@@ -294,9 +355,13 @@ def wr_rankings_page():
                 for err_msg in swap_pos_rank_form.errors.values():
                     flash(f'There was an error with swapping ranks {err_msg}', category='danger')
 
-    wr_players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Rank.custom_pos_rank).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == 'WR').order_by(Rank.custom_rank).all()
+    wr_players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Rank.custom_pos_rank).join(
+        Rank, Player.id == Rank.player_id).filter(
+        Rank.user_id == current_user.id, 
+        Player.position == 'WR').order_by(Rank.custom_rank).all()
     max_wr_tier = wr_players[-1].custom_tier
-    return render_template('wr_rankings.html', players=wr_players, swap_pos_rank_form=swap_pos_rank_form, max_tier=max_wr_tier, add_tier_form=add_tier_form)
+    return render_template('wr_rankings.html', players=wr_players, 
+        swap_pos_rank_form=swap_pos_rank_form, max_tier=max_wr_tier, add_tier_form=add_tier_form)
 
 @app.route('/rankings/te', methods=['GET', 'POST'])
 @login_required
@@ -309,13 +374,17 @@ def te_rankings_page():
         if form_name == 'pos-swap-form':
             if swap_pos_rank_form.validate_on_submit():
                 swapped_player_id = request.form.get('swapped_player')
-                player1_object = Rank.query.filter_by(user_id=current_user.id, player_id=swapped_player_id).first()
+                player1_object = Rank.query.filter_by(user_id=current_user.id, 
+                    player_id=swapped_player_id).first()
                 new_pos_rank = int(request.form.get('new_pos_rank'))
-                new_rank = db.session.query(Rank).filter(Rank.user_id == current_user.id, Rank.custom_pos_rank == new_pos_rank, Rank.position == player1_object.position).first()
-                print(new_rank.player_id)
+                new_rank = db.session.query(Rank).filter(
+                    Rank.user_id == current_user.id, 
+                    Rank.custom_pos_rank == new_pos_rank, 
+                    Rank.position == player1_object.position).first()
                 new_rank = new_rank.custom_rank
 
-                num_pos_players = len(db.session.query(Player).filter(Player.position == player1_object.position).all())
+                num_pos_players = len(db.session.query(Player).filter(
+                    Player.position == player1_object.position).all())
                 if new_pos_rank > num_pos_players:
                     flash('Please enter a position rank between 1 and ' + str(num_pos_players))
                 else:
@@ -326,7 +395,11 @@ def te_rankings_page():
                     # This triggers when the swapped player is being moved down in the rankings (to a larger rank number)
                     elif new_pos_rank > player1_object.custom_pos_rank:
                         pos_rank_changes = []
-                        above_players = db.session.query(Rank).filter(Rank.user_id==current_user.id, Rank.custom_rank <= new_rank, Rank.custom_rank > player1_object.custom_rank).order_by(Rank.custom_rank).all()
+                        above_players = db.session.query(Rank).filter(
+                            Rank.user_id==current_user.id, 
+                            Rank.custom_rank <= new_rank, 
+                            Rank.custom_rank > player1_object.custom_rank).order_by(
+                            Rank.custom_rank).all()
                         for player in above_players:
                             if player.position == player1_object.position:
                                 pos_rank_changes.append(player.custom_pos_rank)
@@ -341,7 +414,11 @@ def te_rankings_page():
                     # This triggers when the swapped player is being moved up in the rankings (to a smaller rank number)
                     elif new_pos_rank < player1_object.custom_pos_rank:
                         pos_rank_changes = []
-                        below_players = db.session.query(Rank).filter(Rank.user_id==current_user.id, Rank.custom_rank >= new_rank, Rank.custom_rank < player1_object.custom_rank).order_by(Rank.custom_rank).all()
+                        below_players = db.session.query(Rank).filter(
+                            Rank.user_id==current_user.id, 
+                            Rank.custom_rank >= new_rank, 
+                            Rank.custom_rank < player1_object.custom_rank).order_by(
+                            Rank.custom_rank).all()
                         for player in below_players:
                             if player.position == player1_object.position:
                                 pos_rank_changes.append(player.custom_pos_rank)
@@ -357,9 +434,14 @@ def te_rankings_page():
                 for err_msg in swap_pos_rank_form.errors.values():
                     flash(f'There was an error with swapping ranks {err_msg}', category='danger')
 
-    te_players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Rank.custom_pos_rank).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == 'TE').order_by(Rank.custom_rank).all()
+    te_players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Rank.custom_pos_rank).join(
+        Rank, Player.id == Rank.player_id).filter(
+        Rank.user_id == current_user.id, 
+        Player.position == 'TE').order_by(
+        Rank.custom_rank).all()
     max_te_tier = te_players[-1].custom_tier
-    return render_template('te_rankings.html', players=te_players, swap_pos_rank_form=swap_pos_rank_form, max_tier=max_te_tier, add_tier_form=add_tier_form)
+    return render_template('te_rankings.html', players=te_players, 
+        swap_pos_rank_form=swap_pos_rank_form, max_tier=max_te_tier, add_tier_form=add_tier_form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
@@ -373,7 +455,9 @@ def register_page():
         db.session.add(user_to_create)
         db.session.commit()
         for player in players:
-            rank = Rank(user_id=user_to_create.id, player_id=player.id, custom_rank=player.rank, custom_tier=1, custom_pos_rank=player.position_rank, position=player.position)
+            rank = Rank(user_id=user_to_create.id, player_id=player.id, 
+                custom_rank=player.rank, custom_tier=1, 
+                custom_pos_rank=player.position_rank, position=player.position)
             db.session.add(rank)
             db.session.commit()
 
@@ -411,14 +495,37 @@ def logout_page():
 
 @app.route('/draft')
 def draft_page():
-    players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank).all()
-    values = db.session.query(Player, Rank.custom_rank, Rank.custom_rank - Player.adp).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank - Player.adp).all()
-    qbs = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == "QB").order_by(Rank.custom_rank).all()
-    rbs = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == "RB").order_by(Rank.custom_rank).all()
-    wrs = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == "WR").order_by(Rank.custom_rank).all()
-    tes = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id, Player.position == "TE").order_by(Rank.custom_rank).all()
-    ids = db.session.query(Player.id).all()
+    players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(
+        Rank, Player.id == Rank.player_id).filter(
+        Rank.user_id == current_user.id).order_by(
+        Rank.custom_rank).all()
 
+    values = db.session.query(Player, Rank.custom_rank, Rank.custom_rank - Player.adp).join(
+        Rank, Player.id == Rank.player_id).filter(
+        Rank.user_id == current_user.id).order_by(
+        Rank.custom_rank - Player.adp).all()
+
+    qbs = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Player.adp).join(
+        Rank, Player.id == Rank.player_id).filter(
+        Rank.user_id == current_user.id, Player.position == "QB").order_by(
+        Rank.custom_rank - Player.adp).all()
+
+    rbs = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Player.adp).join(
+        Rank, Player.id == Rank.player_id).filter(
+        Rank.user_id == current_user.id, Player.position == "RB").order_by(
+        Rank.custom_rank - Player.adp).all()
+
+    wrs = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Player.adp).join(
+        Rank, Player.id == Rank.player_id).filter(
+        Rank.user_id == current_user.id, Player.position == "WR").order_by(
+        Rank.custom_rank - Player.adp).all()
+
+    tes = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Player.adp).join(
+        Rank, Player.id == Rank.player_id).filter(
+        Rank.user_id == current_user.id, Player.position == "TE").order_by(
+        Rank.custom_rank - Player.adp).all()
+
+    ids = db.session.query(Player.id).all()
     return render_template('draft.html', players=players, values=values, qbs=qbs, rbs=rbs, wrs=wrs, tes=tes, ids=json.dumps(ids))
 
 

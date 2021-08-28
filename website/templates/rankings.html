@@ -37,7 +37,7 @@
 					<th scope="col" class="text-center">Fantasy Pros</th>
 					<th scope="col" class="text-center">FFB Calculator</th>
 					<th scope="col" class="text-center">Sporting News</th>
-					<th scope="col" class="text-center">Options</th>
+					<th scope="col" class="text-center"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -60,7 +60,7 @@
 						<td class="text-center">{{ player[0].ffb_calc_rank }}</td>
 						<td class="text-center">{{ player[0].sport_news_rank }}</td>
 						<td class="text-center">
-								<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player[0].id }}">Swap</button>
+								<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player[0].id }}">Change</button>
 						</td>
 					</tr>
 				{% endfor %}
@@ -68,64 +68,6 @@
 		</table>
 	</div>
 
-	<script>
-
-		// None of this script is currently being used to perform player swaps
-		// It is an alternative to the method player modals method I am using
-		addListeners();
-
-		var selected_player1;
-		var selected_player2;
-
-		function addListeners() {
-			swap_btns = document.getElementsByClassName('btn btn-outline btn-outline-success btn-sm');
-			for (var i = 0; i < swap_btns.length; i++) {
-				swap_btns[i].addEventListener("click", swap);
-			}
-		}
-		
-		function swap() {
-			for (var i = 0; i < swap_btns.length; i++) {
-				swap_btns[i].innerHTML = "Swap";
-				swap_btns[i].removeEventListener("click", swap);
-				swap_btns[i].addEventListener("click", swap_players);
-				selected_player1 = this.id;
-			}	
-		}
-
-		function swap_players() {
-			for (var i = 0; i < swap_btns.length; i++) {
-				swap_btns[i].innerHTML = "Change Ranking";
-				swap_btns[i].removeEventListener("click", swap_players);
-				swap_btns[i].addEventListener("click", swap);
-				selected_player2 = this.id;
-			}
-			document.getElementById("save-changes-btn").style.display='inline';
-			swap_rows();
-		}
-
-		function swap_rows() {
-			var player1_row_id = selected_player1.substring(0, selected_player1.length-3) + "row";
-			var player2_row_id = selected_player2.substring(0, selected_player2.length-3) + "row";
-			var player1_row = document.getElementById(player1_row_id);
-			var player2_row = document.getElementById(player2_row_id);
-			var temp = player1_row.innerHTML;
-			player1_row.innerHTML = player2_row.innerHTML;
-			player2_row.innerHTML = temp;
-
-			player1_row.id = player2_row_id;
-			player2_row.id = player1_row_id;
-
-			player1_rank = player1_row.getElementsByClassName("text-center custom-rank")[0];
-			player2_rank = player2_row.getElementsByClassName("text-center custom-rank")[0];
-			temp2 = player1_rank.innerHTML
-			player1_rank.innerHTML = player2_rank.innerHTML
-			player2_rank.innerHTML = temp2
-
-			addListeners();
-		}
-
-	</script>
 {% endblock %}
 
 
