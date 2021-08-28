@@ -46,7 +46,7 @@
 	   	</div>
    	</form>
       <a class="btn btn-outline-warning" id="start-btn" onclick="draft()">Start Draft</a>
-      <a class="btn btn-outline-secondary hidden" id="reset-btn" onclick="reset_draft()">Reset Draft</a>
+      <a class="btn btn-outline-secondary hidden" id="reset-btn" onclick="reset_draft()">End Draft</a>
    </div>
 </div>
 
@@ -121,7 +121,7 @@
 	</div>
 </div>
 
-<div class="row mt-5 hidden">
+<div id="draft-body" class="row mt-5 hidden">
 
 	<div class="col-sm-3">
 		<table id="draftable-players-table" class="table table-hover table-sm" style="margin-left:auto; margin-right:auto;">
@@ -248,19 +248,24 @@
 		color: black;
 	}
 
+	html {
+		scroll-behavior: smooth;
+	}
+
 </style>
-
 <script>
-
 
 	window.addEventListener("load", initialize)
 
 	function initialize() {
+
+		// Loading the top players module
 		top_qbs = document.getElementsByClassName("top-qb")
 		top_rbs = document.getElementsByClassName("top-rb")
 		top_wrs = document.getElementsByClassName("top-wr")
 		top_tes = document.getElementsByClassName("top-te")
 
+		// Loading the top values module
 		value_qbs = document.getElementsByClassName("value-qb")
 		value_rbs = document.getElementsByClassName("value-rb")
 		value_wrs = document.getElementsByClassName("value-wr")
@@ -276,36 +281,48 @@
 			value_rbs[i].classList.remove("hidden")
 			value_wrs[i].classList.remove("hidden")
 			value_tes[i].classList.remove("hidden")
-
 		}
-
 	}
 
+	// Set that contains the IDs of all the players
 	var ids_set = new Set()
 	for (var i = 0; i < {{ ids }}.length; i++) {
 		ids_set.add({{ ids }}[i][0])
 	}
 
+	// Initializing global parameters
 	var draft_is_occuring = false;
 	var round = 1;
 	var pick = 1;
 
 	function draft() {
+
+		// Updating parameters
 		draft_is_occuring = true;
 		var active_ids = ids_set;
 		select = document.getElementById("draft_pos")
 		draft_pos = select.options[select.selectedIndex].value;
 		document.getElementById('team-' + draft_pos).getElementsByTagName("p")[0].innerHTML = "Your team"
 
+		// Activating draft buttons for players
 		draft_btns = document.getElementsByClassName("draft-btn")
 		for (var i = 0; i < draft_btns.length; i++) {
 			draft_btns[i].classList.remove("hidden")
 			draft_btns[i].addEventListener("click", draft_player)
 			draft_btns[i].classList.remove("hidden")
 		}
+
 		document.getElementById("reset-btn").classList.remove("hidden");
 		document.getElementById("start-btn").classList.add("hidden");
 
+		// Revealing and scrolling down to the draft board
+		var draft_body = document.getElementById("draft-body")
+		draft_body.classList.remove("hidden")
+		var board_top = draft_body.offsetTop;
+		var nav_height = document.getElementById('navbar').offsetHeight
+		window.scroll(0, board_top - nav_height)
+
+		// Function that handles drafting a player
 		function draft_player() {
 			if (draft_is_occuring  == true) {
 				player_id = this.value;
@@ -327,10 +344,6 @@
 					pick++;
 				}
 			}
-		}
-
-		function load_top_ranks() {
-			
 		}
 	}
 
