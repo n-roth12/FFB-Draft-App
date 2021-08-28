@@ -12,6 +12,8 @@ class Rank(db.Model):
     player_id = db.Column(db.Integer())
     custom_rank = db.Column(db.Integer())
     custom_tier = db.Column(db.Integer())
+    custom_pos_rank = db.Column(db.Integer())
+    position = db.Column(db.Integer())
 
 class Player(db.Model):
     id = db.Column(db.Integer(), primary_key=True)

@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
 {% block title %}
-	Rankings Page
+	Positional Rankings
 {% endblock %}
 
 {% block content %}
 	<div class="jumbotron text-center" style="color:white; background-color:#1D2228;">
 	   <div class=" mx-auto my-1">
-	       <h1 class="display-4 font-weight-normal" style="color: white">Your Custom Overall Rankings</h1>
+	       <h1 class="display-4 font-weight-normal" style="color: white">Your Custom {% block h1 %} {% endblock %} Rankings</h1>
 	   </div>
 	</div>
 	<div class="container">
@@ -29,9 +29,8 @@
 		<table class="table table-hover table-striped table-dark" style="background-color: #1D2228">
 			<thead>
 				<tr>
-					<th scope="col" class="text-center">Custom Rank</th>
+					<th scope="col" class="text-center">Custom {% block p %} {% endblock %} Rank</th>
 					<th scope="col" class="text-center">Name</th>
-					<th scope="col" class="text-center">Position</th>
 					<th scope="col" class="text-center">Team</th>
 					<th scope="col" class="text-center">ADP</th>
 					<th scope="col" class="text-center">Fantasy Pros</th>
@@ -43,7 +42,7 @@
 			<tbody>
 				{% set tiers = [] %}
 				{% for player in players %}
-				{% include 'includes/players_modals.html' %}
+				{% include 'includes/pos_player_modals.html' %}
 					{% if tiers|length < 1 or player.custom_tier != tiers[-1] %}
 						{% do tiers.append(player.custom_tier) %}
 						<tr>
@@ -51,16 +50,15 @@
 						</tr>
 					{% endif %}
 					<tr class="player-row" id="{{ player.id }}-row">
-						<td class="text-center">{{ player.custom_rank }}</td>
+						<td class="text-center custom-rank" form="player-form">{{ player.custom_pos_rank }}</td>
 						<td class="text-center">{{ player[0].name }}</td>
-						<td class="text-center">{{ player[0].position }} {{ player.custom_pos_rank }}</td>
 						<td class="text-center">{{ player[0].team }}</td>
 						<td class="text-center">{{ player[0].adp }}</td>
 						<td class="text-center">{{ player[0].fp_rank }}</td>
 						<td class="text-center">{{ player[0].ffb_calc_rank }}</td>
 						<td class="text-center">{{ player[0].sport_news_rank }}</td>
 						<td class="text-center">
-								<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player[0].id }}">Swap</button>
+								<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapPosRank-{{ player[0].id }}">Swap</button>
 						</td>
 					</tr>
 				{% endfor %}

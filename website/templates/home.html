@@ -16,7 +16,7 @@
   </div>
   <div class="container"> 
     <h2 class="text-center">Current Overall Rankings</h2>
-    <table class="table table-hover table-dark table-striped overflow-hidden" style="width:98%; margin-left:auto; margin-right:auto; background-color: #1D2228; color:white">
+    <table class="table table-hover table-dark table-striped overflow-hidden" style="background-color: #1D2228; color:white">
       <thead>
           <tr>
               <th scope="col" class="text-center">Rank</th>
@@ -36,7 +36,7 @@
                   <td class="text-center">{{ player.name }}</td>
                   <td class="text-center">{{ player.position }} {{ player.position_rank }}</td>
                   <td class="text-center">{{ player.team }}</td>
-                  <td class="text-center">{{ (player.adp) }}</td>
+                  <td class="text-center">{{ player.adp }}</td>
                   <td class="text-center">{{ player.fp_rank }}</td>
                   <td class="text-center">{{ player.ffb_calc_rank }}</td>
                   <td class="text-center">{{ player.sport_news_rank }}</td>

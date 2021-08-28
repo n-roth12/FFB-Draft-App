@@ -4,14 +4,14 @@
 	}
 </style>
 
-<div class="modal fade" id="Modal-SwapRank-{{ player[0].id }}"
+<div class="modal fade" id="Modal-SwapPosRank-{{ player[0].id }}"
 	tabindex="-1"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="ModalLabel" style="color: white;">
-					{{ player.custom_rank }}. {{ player[0].name }}
+					{{ player.custom_pos_rank }}. {{ player[0].name }}
 				</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -19,15 +19,16 @@
 			</div>
 			<div class="modal-body">
 				<form method="POST">
-					{{ swap_rank_form.hidden_tag()}}
+					{{ swap_pos_rank_form.hidden_tag()}}
 					<p style="color: white;"> 
-						Enter new overall rank for {{ player[0].name }}:
+						Enter a new {{ player[0].position }} rank for {{ player[0].name }}:
 					</p>
-					{{ swap_rank_form.new_rank(class="form-control", placeholder="New Rank") }}
+					{{ swap_pos_rank_form.new_pos_rank(class="form-control", placeholder="New Position Rank") }}
 					<br>
 					<input id="swapped_player" name="swapped_player" type="hidden" value="{{ player[0].id }}">
-					<input type="hidden" name="form-name" value="swap-form">
-					{{ swap_rank_form.submit(class="btn btn-outline-success btn-block") }}
+					<input id="position" name="position" type="hidden" value="{{ player[0].position }}">
+					<input type="hidden" name="form-name" value="pos-swap-form">
+					{{ swap_pos_rank_form.submit(class="btn btn-outline-success btn-block") }}
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -54,7 +55,7 @@
 			</div>
 			<div class="modal-body">
 				<form method="POST">
-					{{ swap_rank_form.hidden_tag()}}
+					{{ swap_pos_rank_form.hidden_tag()}}
 					<p> 
 						Enter rank of top player in new custom tier {{ max_tier + 1 }}:
 					</p>

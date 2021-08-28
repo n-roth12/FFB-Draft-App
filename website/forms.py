@@ -34,6 +34,11 @@ class SwapRankForm(FlaskForm):
 	new_rank= IntegerField(label='Old Player Rank', validators=[DataRequired(), NumberRange(1, num_players - 1)])
 	submit = SubmitField(label='Submit Rank Change')
 
+class SwapPosRankForm(FlaskForm):
+	num_players = len(Player.query.all())
+	new_pos_rank= IntegerField(label='Old Player Rank', validators=[DataRequired(), NumberRange(1, num_players - 1)])
+	submit = SubmitField(label='Submit Rank Change')
+
 class AddTierForm(FlaskForm):
 	def validate_new_tier_cutoff(self, new_tier_cutoff_to_check):
 		players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(Rank, Player.id == Rank.player_id).filter(Rank.user_id == current_user.id).order_by(Rank.custom_rank).all()
