@@ -297,6 +297,7 @@
 		draft_board = document.getElementById('draft-board')
 		draft_pos = document.getElementById("draft_pos").value
 		num_players = document.getElementById("num_teams").value
+		draft_type = document.getElementById("draft_type").value
 
 		drafters_head = draft_board.getElementsByTagName('thead')[0]
 		drafters = drafters_head.getElementsByTagName('tr')[0]
@@ -319,17 +320,24 @@
 			for (var j = 0; j < num_players; j++) {
 				card_td = document.createElement('td')
 				card_td.setAttribute("class", "col card draft-card")
-				card_td.setAttribute("id", "rd" + parseInt(i + 1) + "-pk" + Math.abs(parseInt(j + 1) - (parseInt(parseInt(num_players) + 1) * (i % 2))))
-				card_placeholder = document.createElement("p")
-				card_placeholder.setAttribute("class", "pick-placeholder")
-				placeholder_num = Math.abs(parseInt(j + 1) - (parseInt(parseInt(num_players) + 1) * (i % 2)))
-				card_placeholder.innerHTML = "" + parseInt(i + 1) + "." + placeholder_num
-				card_td.appendChild(card_placeholder)
-
+				if (draft_type === "snake") {
+					card_td.setAttribute("id", "rd" + parseInt(i + 1) + "-pk" + Math.abs(parseInt(j + 1) - (parseInt(parseInt(num_players) + 1) * (i % 2))))
+					card_placeholder = document.createElement("p")
+					card_placeholder.setAttribute("class", "pick-placeholder")
+					placeholder_num = Math.abs(parseInt(j + 1) - (parseInt(parseInt(num_players) + 1) * (i % 2)))
+					card_placeholder.innerHTML = "" + parseInt(i + 1) + "." + placeholder_num
+					card_td.appendChild(card_placeholder)
+				} else {
+					card_td.setAttribute("id", "rd" + parseInt(i + 1) + "-pk" + Math.abs(parseInt(j + 1)))
+					card_placeholder = document.createElement("p")
+					card_placeholder.setAttribute("class", "pick-placeholder")
+					placeholder_num = Math.abs(parseInt(j + 1))
+					card_placeholder.innerHTML = "" + parseInt(i + 1) + "." + placeholder_num
+					card_td.appendChild(card_placeholder)	
+				}
 				card_name = document.createElement("p")
 				card_name.setAttribute("class", "pick-name hidden font-weight-bold text-left")
 				card_td.appendChild(card_name)
-
 				card_row.appendChild(card_td)
 			}
 			cards.appendChild(card_row)
