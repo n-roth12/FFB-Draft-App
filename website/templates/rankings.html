@@ -47,7 +47,7 @@
 					{% if tiers|length < 1 or player.custom_tier != tiers[-1] %}
 						{% do tiers.append(player.custom_tier) %}
 						<tr>
-							<td class="bg-secondary">Tier {{ player.custom_tier }}  <a href="#">Edit Tier</a></td>
+							<td class="bg-secondary">Tier {{ player.custom_tier }}</td>
 						</tr>
 					{% endif %}
 					<tr class="player-row" id="{{ player.id }}-row">

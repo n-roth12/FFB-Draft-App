@@ -40,8 +40,15 @@
 				</tr>
 			</thead>
 			<tbody>
+				{% set tiers = [] %}
 				{% for player in players %}
 				{% include 'includes/pos_player_modals.html' %}
+					{% if tiers|length < 1 or player.custom_tier != tiers[-1] %}
+						{% do tiers.append(player.custom_tier) %}
+						<tr>
+							<td class="bg-secondary">Tier {{ player.custom_tier }}</td>
+						</tr>
+					{% endif %}
 					<tr class="player-row" id="{{ player.id }}-row">
 						<td class="text-center custom-rank" form="player-form">{{ player.custom_pos_rank }}</td>
 						<td class="text-center">{{ player[0].name }}</td>

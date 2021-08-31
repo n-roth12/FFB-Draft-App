@@ -7,9 +7,9 @@
 {% block content %}
 <div class="jumbotron text-center" style="color:white; background-color:#1D2228;">
    <div class="mx-auto my-1">
-   	<h1 class="display-4 font-weight-normal" style="color: white">Draft Helper</h1>
+   	<h1 class="display-4 font-weight-normal" style="color: white">Draft Assistant</h1>
    	<br>
-   	<form class="form-group row">
+   	<form class="form-group row" id="draft-options">
    		<div class="col-1 offset-4">
    			<label for="draft_pos" style="color:white">Choose a Draft Position</label>
    			<select name="draft_pos" id="draft_pos" class="form-control">
@@ -173,6 +173,17 @@
 </div>
 
 <style>
+
+	#draft-board {
+		width: 1300px;
+	}
+
+	.drafter {
+		width: 110px;
+		text-align: center;
+		background-color: none;
+	}
+
 	.pick-name {
 		margin: -5px;
 		padding: -5px;
@@ -181,10 +192,16 @@
 	.card {
 		height: 70px;
 		width: 110px;
-		background-color: #A9A9A9; 
-		color: #E1E2E2;
 		text-align: center;
 		margin:  1px 1px 1px 1px;
+	}
+
+	.user-thead {
+		background-color: black;
+	}
+
+	.user-thead p {
+		color: white;
 	}
 
 	p {
@@ -201,6 +218,7 @@
 	}
 
 	.draft-card {
+		background-color: #A9A9A9; 
 		font-size: 10pt;
 		border: none;
 		border-radius: 5px;
@@ -299,20 +317,25 @@
 		num_players = document.getElementById("num_teams").value
 		draft_type = document.getElementById("draft_type").value
 
+		document.getElementById("draft-options").classList.add("hidden")
+
+		// Creating the table header for the drafters
 		drafters_head = draft_board.getElementsByTagName('thead')[0]
 		drafters = drafters_head.getElementsByTagName('tr')[0]
 		for (var i = 0; i < num_players; i ++) {
-			drafter_td = document.createElement('td')
-			drafter_td.classList.add("col")
-			drafter_td.setAttribute("id", "team-" + parseInt(i + 1))
+			drafter_th = document.createElement('th')
+			drafter_th.setAttribute("scope", "col")
+			drafter_th.setAttribute("id", "team-" + parseInt(i + 1))
+			drafter_th.setAttribute("class", "col card")
 
 			drafter_p = document.createElement('p')
 			drafter_p.innerHTML = "Team "+ parseInt(i + 1)
-			drafter_td.appendChild(drafter_p)
+			drafter_th.appendChild(drafter_p)
 
-			drafters.appendChild(drafter_td)
+			drafters.appendChild(drafter_th)
 		}
 
+		// Creating the draft board with placeholder text
 		cards = draft_board.getElementsByTagName('tbody')[0]
 		for (var i = 0; i < 15; i++) {
 			card_row = document.createElement("tr")
@@ -345,7 +368,7 @@
 
 		user_thead = document.getElementById('team-' + draft_pos)
 		user_thead.getElementsByTagName("p")[0].innerHTML = "Your team"
-		user_thead.setAttribute("class", "user-thead")
+		user_thead.classList.add("user-thead")
 
 		// Activating draft buttons for players
 		draft_btns = document.getElementsByClassName("draft-btn")
@@ -380,7 +403,7 @@
 				pick_card.classList.add(pos);
 				pick_card.getElementsByClassName("pick-name")[0].innerHTML = name;
 				pick_card.getElementsByClassName("pick-name")[0].classList.remove("hidden");   
-				if (pick >= 12) {
+				if (pick >= num_players) {
 					pick = 1;
 					round++;
 				} else {
