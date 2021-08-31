@@ -176,6 +176,7 @@
 
 	#draft-board {
 		width: 1300px;
+		overflow: auto;
 	}
 
 	.drafter {
@@ -402,13 +403,34 @@
 				pos = name_pos[1];
 				pick_card.classList.add(pos);
 				pick_card.getElementsByClassName("pick-name")[0].innerHTML = name;
-				pick_card.getElementsByClassName("pick-name")[0].classList.remove("hidden");   
+				pick_card.getElementsByClassName("pick-name")[0].classList.remove("hidden");
+
+				value_player = document.getElementById("value-player-" + player_id)
+				value_player.parentNode.removeChild(value_player)
+
+				top_player = document.getElementById("top-player-" + player_id)
+				top_player.parentNode.removeChild(top_player)
+
+				load_tips(pos)
+
 				if (pick >= num_players) {
 					pick = 1;
 					round++;
 				} else {
 					pick++;
 				}
+			}
+		}
+
+		function load_tips(pos) {
+			pos = pos.toLowerCase()
+			t = document.getElementsByClassName("top-" + pos)
+			console.log(t.length)
+			value = document.getElementsByClassName("value-" + pos)
+
+			for (var i = 0; i < 5; i++) {
+				t[i].classList.remove("hidden")
+				value[i].classList.remove("hidden")
 			}
 		}
 	}
@@ -419,6 +441,6 @@
 
 </script>
 
-
-
 {% endblock %}
+
+
