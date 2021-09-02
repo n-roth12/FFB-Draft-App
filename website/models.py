@@ -35,18 +35,6 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(length=30), nullable=False, unique=True)
     email_address = db.Column(db.String(length=50), nullable=False, unique=True)
     password_hash = db.Column(db.String(length=60), nullable=False)
-    """tier1_cutoff = db.Column(db.Integer(), nullable=False)
-    tier2_cutoff = db.Column(db.Integer())
-    tier3_cutoff = db.Column(db.Integer())
-    tier4_cutoff = db.Column(db.Integer())
-    tier5_cutoff = db.Column(db.Integer())
-    tier6_cutoff = db.Column(db.Integer())
-    tier7_cutoff = db.Column(db.Integer())
-    tier8_cutoff = db.Column(db.Integer())
-    tier9_cutoff = db.Column(db.Integer())
-    tier10_cutoff = db.Column(db.Integer())
-    tier11_cutoff = db.Column(db.Integer())
-    tier12_cutoff = db.Column(db.Integer())"""
     
     @property
     def password(self):

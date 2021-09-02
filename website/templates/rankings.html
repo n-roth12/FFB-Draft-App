@@ -11,6 +11,14 @@
 	   </div>
 	</div>
 	<div class="container">
+		<div class="row">
+			<div class="col text-center">
+				<p>
+					Select "Change" to adjust the ranking of a specific player. 
+					Select "Add Tier" to add an additional tier to your rankings.
+				</p>
+			</div>
+		</div>
 		<div class="text-center row">
 			<p style=""class="col">Filter By Position: <a href="{{ url_for('rankings_page') }}">All</a> | <a href="{{ url_for('qb_rankings_page') }}">QB</a> | <a href="{{ url_for('rb_rankings_page') }}">RB</a> | <a href="{{ url_for('wr_rankings_page') }}">WR</a> | <a href="{{ url_for('te_rankings_page') }}">TE</a> 
 			</p>
@@ -19,11 +27,6 @@
 			<div class="col text-center">
 				<button class="btn btn-outline-primary" data-toggle="modal" data-target="#Modal-AddTier-{{ max_tier }}">Add Tier</button>
 			</div>
-		</div>
-		<div class="text-center">
-			<form method="POST" class="save-changes">
-				<a id="save-changes-btn" style="display: none" onclikc="save_changes" class="btn btn-outline-primary" href="{{ url_for('rankings_page') }}">Save Changes</a>
-			</form>
 		</div>
 		<br>
 		<table class="table table-hover table-striped table-dark" style="background-color: #1D2228">

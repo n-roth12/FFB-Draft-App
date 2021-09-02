@@ -21,49 +21,14 @@
 				<form method="POST">
 					{{ swap_pos_rank_form.hidden_tag()}}
 					<p style="color: white;"> 
-						Enter a new {{ player[0].position }} rank for {{ player[0].name }}:
+						Enter a new {{ position }} rank for {{ player[0].name }}:
 					</p>
 					{{ swap_pos_rank_form.new_pos_rank(class="form-control", placeholder="New Position Rank") }}
 					<br>
 					<input id="swapped_player" name="swapped_player" type="hidden" value="{{ player[0].id }}">
-					<input id="position" name="position" type="hidden" value="{{ player[0].position }}">
+					<input id="position" name="position" type="hidden" value="{{ position }}">
 					<input type="hidden" name="form-name" value="pos-swap-form">
 					{{ swap_pos_rank_form.submit(class="btn btn-outline-success btn-block") }}
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
-					Cancel
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade" id="Modal-Pos_AddTier-{{ max_tier }}"
-	tabindex="-1"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="ModalLabel" style="color: white;">
-					Tier {{ max_tier + 1 }}
-				</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<form method="POST">
-					{{ swap_pos_rank_form.hidden_tag()}}
-					<p style="color: white;"> 
-						Enter rank of top player in new custom tier {{ max_tier + 1 }}:
-					</p>
-					{{ add_tier_form.new_tier_cutoff(class="form-control", placeholder="Top Rank ") }}
-					<br>
-					<input id="new_tier" name="new_tier" type="hidden" value="{{ max_tier + 1 }}">
-					<input type="hidden" name="form-name" value="tier-form">
-					{{ add_tier_form.submit(class="btn btn-outline-success btn-block") }}
 				</form>
 			</div>
 			<div class="modal-footer">

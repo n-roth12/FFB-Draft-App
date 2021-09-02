@@ -128,7 +128,6 @@ def rankings_page():
 @login_required
 def qb_rankings_page():
     swap_pos_rank_form = SwapPosRankForm()
-    add_tier_form = AddTierForm()
 
     if request.method == 'POST':
         form_name = request.form['form-name']
@@ -202,13 +201,12 @@ def qb_rankings_page():
         Rank.custom_rank).all()
     max_qb_tier = qb_players[-1].custom_tier
     return render_template('qb_rankings.html', players=qb_players, swap_pos_rank_form=swap_pos_rank_form, 
-        max_tier=max_qb_tier, add_tier_form=add_tier_form)
+        max_tier=max_qb_tier, position='QB')
 
 @app.route('/rankings/rb', methods=['GET', 'POST'])
 @login_required
 def rb_rankings_page():
     swap_pos_rank_form = SwapPosRankForm()
-    add_tier_form = AddTierForm()
 
     if request.method == 'POST':
         form_name = request.form['form-name']
@@ -282,13 +280,12 @@ def rb_rankings_page():
         Rank.custom_rank).all()
     max_rb_tier = rb_players[-1].custom_tier
     return render_template('rb_rankings.html', players=rb_players, 
-        swap_pos_rank_form=swap_pos_rank_form, max_tier=max_rb_tier, add_tier_form=add_tier_form)
+        swap_pos_rank_form=swap_pos_rank_form, max_tier=max_rb_tier, position='RB')
 
 @app.route('/rankings/wr', methods=['GET', 'POST'])
 @login_required
 def wr_rankings_page():
     swap_pos_rank_form = SwapPosRankForm()
-    add_tier_form = AddTierForm()
 
     if request.method == 'POST':
         form_name = request.form['form-name']
@@ -361,13 +358,12 @@ def wr_rankings_page():
         Player.position == 'WR').order_by(Rank.custom_rank).all()
     max_wr_tier = wr_players[-1].custom_tier
     return render_template('wr_rankings.html', players=wr_players, 
-        swap_pos_rank_form=swap_pos_rank_form, max_tier=max_wr_tier, add_tier_form=add_tier_form)
+        swap_pos_rank_form=swap_pos_rank_form, max_tier=max_wr_tier, position='WR')
 
 @app.route('/rankings/te', methods=['GET', 'POST'])
 @login_required
 def te_rankings_page():
     swap_pos_rank_form = SwapPosRankForm()
-    add_tier_form = AddTierForm()
 
     if request.method == 'POST':
         form_name = request.form['form-name']
@@ -441,7 +437,7 @@ def te_rankings_page():
         Rank.custom_rank).all()
     max_te_tier = te_players[-1].custom_tier
     return render_template('te_rankings.html', players=te_players, 
-        swap_pos_rank_form=swap_pos_rank_form, max_tier=max_te_tier, add_tier_form=add_tier_form)
+        swap_pos_rank_form=swap_pos_rank_form, max_tier=max_te_tier, position='TE')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
