@@ -15,30 +15,6 @@ def home_page():
     players = Player.query.order_by('rank').all()
     return render_template('home.html', players=players)
 
-# Route specifically dedicated to clearing and reconstructing database
-# from website scrapes. Entering this route will delete all database information
-# including registered users and players.
-@app.route('/scrape')
-def scrape_route():
-    db.drop_all()
-    db.create_all()
-    db.session.commit()
-    scrape()
-    generateAdps()
-    generatePosRanks()
-    players = Player.query.order_by('rank').all()
-    return render_template('home.html', players=players)
-
-# This route is meant to be used after the scrape route in order to prevent 
-# unnecessary scraping. It generates the ADPs and position ranks for each player
-# based on the scraped data.
-@app.route('/generate')
-def generate_route():
-    generateAdps()
-    generatePosRanks()
-    players = Player.query.order_by('adp').all()
-    return render_template('home.html', players=players)
-
 @app.route('/rankings', methods=['GET', 'POST'])
 @login_required
 def rankings_page():
@@ -699,11 +675,6 @@ def generatePosRanks():
             te_count += 1
             player.position_rank = te_count
         db.session.commit()
-
-
-
-
-
 
 
 
