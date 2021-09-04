@@ -20,7 +20,8 @@ def scrape():
     opts.add_argument("--disable-notifications")
 
     #driver = webdriver.Chrome(executable_path=os.path.join(os.path.dirname(os.getcwd()), "chromedriver.exe"))
-    driver = webdriver.Chrome('chromedriver.exe', chrome_options=opts)
+    print(os.getcwd())
+    driver = webdriver.Chrome('../chromedriver', chrome_options=opts)
 
     fp_scrape(opts, driver)
     sport_news_scrape(opts, driver)
