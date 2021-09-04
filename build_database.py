@@ -2,6 +2,7 @@ from website.models import Player, User, Rank
 from website import db
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 import json
 import re
 
@@ -25,7 +26,8 @@ def scrape():
 def fp_scrape(opts):
     print('Scraping Fantasy Pros rankings...')
 
-    driver = webdriver.Chrome('/Users/NolanRoth/Desktop/ProjectWebsite/chromedriver', chrome_options=opts)
+    #driver = webdriver.Chrome('chromedriver', chrome_options=opts)
+    driver = webdriver.Chrome(ChromeDriverManager().install())
     driver.get('https://www.fantasypros.com/nfl/rankings/consensus-cheatsheets.php')
 
     javaScript = "window.scrollBy(0,1000);"
