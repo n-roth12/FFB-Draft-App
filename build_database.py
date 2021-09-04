@@ -21,7 +21,7 @@ def scrape():
 
     #driver = webdriver.Chrome(executable_path=os.path.join(os.path.dirname(os.getcwd()), "chromedriver.exe"))
     print(os.getcwd())
-    driver = webdriver.Chrome('../chromedriver', chrome_options=opts)
+    driver = webdriver.Chrome("/Users/NolanRoth/Desktop/ProjectWebsite/chromedriver", chrome_options=opts)
 
     fp_scrape(opts, driver)
     sport_news_scrape(opts, driver)
