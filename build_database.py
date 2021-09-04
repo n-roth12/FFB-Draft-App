@@ -19,7 +19,7 @@ def scrape():
     opts.add_argument("--headless")
     opts.add_argument("--disable-notifications")
 
-    driver = webdriver.Chrome(executable_path=os.path.abspath("chromedriver.exe"))
+    driver = webdriver.Chrome(executable_path=os.path.join(os.path.dirname(os.getcwd()), "chromedriver.exe"))
     #driver = webdriver.Chrome('chromedriver', chrome_options=opts)
 
     fp_scrape(opts, driver)
