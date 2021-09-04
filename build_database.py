@@ -2,8 +2,8 @@ from website.models import Player, User, Rank
 from website import db
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
 import json
+import os
 import re
 
 def build():
@@ -19,15 +19,16 @@ def scrape():
     opts.add_argument("--headless")
     opts.add_argument("--disable-notifications")
 
-    fp_scrape(opts)
-    sport_news_scrape(opts)
-    ffb_calc_scrape(opts)
+    driver = webdriver.Chrome(executable_path=os.path.abspath("chromedriver.exe"))
+    #driver = webdriver.Chrome('chromedriver', chrome_options=opts)
 
-def fp_scrape(opts):
+    fp_scrape(opts, driver)
+    sport_news_scrape(opts, driver)
+    ffb_calc_scrape(opts, driver)
+
+def fp_scrape(opts, driver):
     print('Scraping Fantasy Pros rankings...')
 
-    #driver = webdriver.Chrome('chromedriver', chrome_options=opts)
-    driver = webdriver.Chrome(ChromeDriverManager().install())
     driver.get('https://www.fantasypros.com/nfl/rankings/consensus-cheatsheets.php')
 
     javaScript = "window.scrollBy(0,1000);"
@@ -62,10 +63,10 @@ def fp_scrape(opts):
     print('Completed scraping Fantasy Pros rankings!')
     driver.quit()
 
-def ffb_calc_scrape(opts):
+def ffb_calc_scrape(opts, driver):
     print('Scraping Fantasy Football Calculator rankings...')
 
-    driver = webdriver.Chrome('/Users/NolanRoth/Desktop/ProjectWebsite/chromedriver', chrome_options=opts)
+    #driver = webdriver.Chrome('/Users/NolanRoth/Desktop/ProjectWebsite/chromedriver', chrome_options=opts)
     driver.get('https://fantasyfootballcalculator.com/rankings/ppr')
 
     body = driver.find_element_by_id('kt_content')
@@ -106,10 +107,10 @@ def ffb_calc_scrape(opts):
     print('Completed scraping Fantasy Football Calculator rankings!')
     driver.quit()
 
-def sport_news_scrape(opts):
+def sport_news_scrape(opts, driver):
     print('Scraping Sporting News rankings...')
 
-    driver = webdriver.Chrome('/Users/NolanRoth/Desktop/ProjectWebsite/chromedriver', chrome_options=opts)
+    #driver = webdriver.Chrome('chromedriver', chrome_options=opts)
     driver.get('https://www.sportingnews.com/us/fantasy/news/2021-fantasy-football-rankings-top-200-cheat-sheet/1mz21lwlgdyfa1asbqdsrib2az')
 
     body = driver.find_element_by_class_name('article-body')
