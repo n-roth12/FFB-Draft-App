@@ -12,7 +12,7 @@ app.config['SECRET_KEY'] = 'ee0442debd6e5574666cd67a'
 app.jinja_options['extensions'].append('jinja2.ext.do')
 
 # change this to dev to use development database and prod to use production database
-ENV = 'dev'
+ENV = 'proc'
 
 if ENV == 'dev':
 	app.debug = True
