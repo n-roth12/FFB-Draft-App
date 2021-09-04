@@ -1,1 +1,1 @@
-we: gunicorn app:run
+we: gunicorn app:app
