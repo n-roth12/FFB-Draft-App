@@ -24,9 +24,9 @@ def scrape():
     #driver = webdriver.Chrome(executable_path=os.path.join(os.path.dirname(os.getcwd()), "chromedriver.exe"))
     driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
-    fp_scrape(opts, driver)
-    sport_news_scrape(opts, driver)
-    ffb_calc_scrape(opts, driver)
+    fp_scrape(chrome_options, driver)
+    sport_news_scrape(chrome_options, driver)
+    ffb_calc_scrape(chrome_options, driver)
 
 def fp_scrape(opts, driver):
     print('Scraping Fantasy Pros rankings...')
