@@ -15,12 +15,14 @@ def build():
     generatePosRanks()
 
 def scrape():
-    opts = Options()
-    opts.add_argument("--headless")
-    opts.add_argument("--disable-notifications")
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.binary_location = os.environment.get("GOOGLE_CHROME_BIN")
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
 
     #driver = webdriver.Chrome(executable_path=os.path.join(os.path.dirname(os.getcwd()), "chromedriver.exe"))
-    driver = webdriver.Chrome("app/chromedriver", chrome_options=opts)
+    driver = webdriver.Chrome(executable_path=os.environment.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
     fp_scrape(opts, driver)
     sport_news_scrape(opts, driver)
