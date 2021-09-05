@@ -97,25 +97,25 @@
 		<div class="col">
 			<h4>QB:</h4>
 			{% for qb in qbs %}
-				<p class="value-qb m-1 hidden" id="value-player-{{ qb[0].id }}">#{{ qb.custom_rank }}. {{ qb[0].name }}, ADP:{{ qb.adp }}</p>
+				<p class="value-qb m-1 hidden" id="value-player-{{ qb[0].id }}">#{{ qb.custom_rank }}. {{ qb[0].name }}, ADP: {{ qb.rank }}</p>
 			{% endfor %}
 		</div>
 		<div class="col">
 			<h4>RB:</h4>
 			{% for rb in rbs %}
-				<p class="value-rb m-1 hidden" id="value-player-{{ rb[0].id }}">#{{ rb.custom_rank }}. {{ rb[0].name }}, ADP:{{ rb.adp }}</p>
+				<p class="value-rb m-1 hidden" id="value-player-{{ rb[0].id }}">#{{ rb.custom_rank }}. {{ rb[0].name }}, ADP: {{ rb.rank }}</p>
 			{% endfor %}
 		</div>
 		<div class="col">
 			<h4>WR:</h4>
 			{% for wr in wrs %}
-				<p class="value-wr m-1 hidden" id="value-player-{{ wr[0].id }}">#{{ wr.custom_rank }}. {{ wr[0].name }} - ADP:{{ wr.adp }}</p>
+				<p class="value-wr m-1 hidden" id="value-player-{{ wr[0].id }}">#{{ wr.custom_rank }}. {{ wr[0].name }} - ADP: {{ wr.rank }}</p>
 			{% endfor %}
 		</div>
 		<div class="col">
 			<h4>TE:</h4>
 			{% for te in tes %}
-				<p class="value-te m-1 hidden" id="value-player-{{ te[0].id }}">#{{ te.custom_rank }}. {{ te[0].name }} - ADP:{{ te.adp }}</p>
+				<p class="value-te m-1 hidden" id="value-player-{{ te[0].id }}">#{{ te.custom_rank }}. {{ te[0].name }} - ADP: {{ te.rank }}</p>
 			{% endfor %}
 		</div>
 	</div>
@@ -147,7 +147,7 @@
 					<tr class="player-row" id="{{ player[0].id }}-row">
 						<td>{{ player.custom_rank }}</td>
 						<td class="text-left name">{{ player[0].name }}, {{ player[0].position }}</td>
-						<td>{{ player[0].adp }}
+						<td>{{ player[0].rank }}
 						<td class="text-center options-col">
 							<button class="btn btn-outline-primary btn-sm draft-btn hidden" value="{{ player[0].id }}">Draft</button>
 						</td>
@@ -296,12 +296,6 @@
 		}
 	}
 
-	// Set that contains the IDs of all the players
-	var ids_set = new Set()
-	for (var i = 0; i < {{ ids }}.length; i++) {
-		ids_set.add({{ ids }}[i][0])
-	}
-
 	// Initializing global parameters
 	var draft_is_occuring = false;
 	var round = 1;
@@ -311,7 +305,6 @@
 
 		// Updating parameters
 		draft_is_occuring = true;
-		var active_ids = ids_set;
 
 		draft_board = document.getElementById('draft-board')
 		draft_pos = document.getElementById("draft_pos").value
@@ -393,7 +386,6 @@
 		function draft_player() {
 			if (draft_is_occuring  == true) {
 				player_id = this.value;
-				active_ids.delete(player_id)
 				player_row = document.getElementById(player_id + "-row");
 				player_row.classList.add("hidden");
 				pick_card = document.getElementById("rd" + round + "-pk" + pick);

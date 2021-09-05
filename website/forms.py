@@ -48,7 +48,6 @@ class AddTierForm(FlaskForm):
 		elif new_tier_cutoff_to_check.data <= max_tier_cutoff:
 			raise ValidationError('New tier must be lower than existing tiers!')
 
-	position = StringField(label='Position', validators=[DataRequired()])
 	new_tier = IntegerField(label='New Tier', validators=[DataRequired()])
 	new_tier_cutoff = IntegerField(label='New Tier Cutoff', validators=[DataRequired()])
 	submit = SubmitField(label='Add Tier')
