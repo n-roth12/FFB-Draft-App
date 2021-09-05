@@ -25,7 +25,7 @@ def scrape():
     driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
     fp_scrape(chrome_options, driver)
-    sport_news_scrape(chrome_options, driver)
+    # sport_news_scrape(chrome_options, driver)
     ffb_calc_scrape(ch, driver)
 
 def fp_scrape(opts, driver):
