@@ -26,7 +26,7 @@ def scrape():
 
     fp_scrape(chrome_options, driver)
     # sport_news_scrape(chrome_options, driver)
-    ffb_calc_scrape(ch, driver)
+    ffb_calc_scrape(chrome_options, driver)
 
 def fp_scrape(opts, driver):
     print('Scraping Fantasy Pros rankings...')
