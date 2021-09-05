@@ -6,6 +6,10 @@ import json
 import os
 import re
 
+# Run this file in the command line in order to build the starting
+# database for the website using data scraped form three different
+# popular fantasy football websites.
+
 def build():
     db.drop_all()
     db.create_all()
