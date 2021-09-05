@@ -18,14 +18,15 @@ def scrape():
     chrome_options = webdriver.ChromeOptions()
     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-notifications")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
 
     #driver = webdriver.Chrome(executable_path=os.path.join(os.path.dirname(os.getcwd()), "chromedriver.exe"))
     driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
     fp_scrape(chrome_options, driver)
     sport_news_scrape(chrome_options, driver)
-    ffb_calc_scrape(chrome_options, driver)
+    ffb_calc_scrape(ch, driver)
 
 def fp_scrape(opts, driver):
     print('Scraping Fantasy Pros rankings...')
@@ -70,6 +71,9 @@ def ffb_calc_scrape(opts, driver):
     #driver = webdriver.Chrome('/Users/NolanRoth/Desktop/ProjectWebsite/chromedriver', chrome_options=opts)
     driver.get('https://fantasyfootballcalculator.com/rankings/ppr')
 
+    javaScript = "window.scrollBy(0,1000);"
+    driver.execute_script(javaScript)
+
     body = driver.find_element_by_id('kt_content')
     rankings_table = body.find_element_by_class_name('table')
     trs = driver.find_elements_by_tag_name('tr')[1:]
@@ -113,6 +117,9 @@ def sport_news_scrape(opts, driver):
 
     #driver = webdriver.Chrome('chromedriver', chrome_options=opts)
     driver.get('https://www.sportingnews.com/us/fantasy/news/2021-fantasy-football-rankings-top-200-cheat-sheet/1mz21lwlgdyfa1asbqdsrib2az')
+
+    javaScript = "window.scrollBy(0,1000);"
+    driver.execute_script(javaScript)
 
     body = driver.find_element_by_class_name('article-body')
     table = body.find_element_by_tag_name('tbody')
