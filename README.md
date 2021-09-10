@@ -1,6 +1,6 @@
 # FFB-Draft-App
 A web application to help fantasy football players perform better in their drafts.
-Wesbite can be viewed at https://ffbdrafthelper.com or https://ffbproject.herokuapp.com.
+Wesbite can be viewed at https://ffbproject.herokuapp.com.
 
 ## Website Pages
 
