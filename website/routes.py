@@ -467,6 +467,7 @@ def logout_page():
     return redirect(url_for("home_page"))
 
 @app.route('/draft')
+@login_required
 def draft_page():
     players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier).join(
         Rank, Player.id == Rank.player_id).filter(
