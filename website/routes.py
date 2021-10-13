@@ -30,12 +30,8 @@ def rankings_page():
                 player1_object = Rank.query.filter_by(
                     user_id=current_user.id, player_id=swapped_player_id).first()
 
-                # This triggers when there is no rank change, so nothing needs to happen
-                if new_rank == player1_object.custom_rank:
-                    pass
-
                 # This triggers when the swapped player is being moved down in the rankings (to a larger rank number)
-                elif new_rank > player1_object.custom_rank:
+                if new_rank > player1_object.custom_rank:
                     pos_rank_changes = []
                     above_players = db.session.query(Rank).filter(
                         Rank.user_id==current_user.id, 
@@ -51,6 +47,7 @@ def rankings_page():
                     player1_object.custom_rank = new_rank
                     if len(pos_rank_changes) > 0:
                         player1_object.custom_pos_rank = pos_rank_changes[-1]
+                    player1_object.custom_tier = above_players[-1].custom_tier
                     db.session.commit()
 
                 # This triggers when the swapped player is being moved up in the rankings (to a smaller rank number)
@@ -70,6 +67,7 @@ def rankings_page():
                     player1_object.custom_rank = new_rank
                     if len(pos_rank_changes) > 0:
                         player1_object.custom_pos_rank = pos_rank_changes[0]
+                    player1_object.custom_tier = below_players[0].custom_tier
                     db.session.commit()
 
             elif swap_rank_form.errors != {}:
