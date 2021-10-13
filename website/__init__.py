@@ -6,10 +6,9 @@ import os
 import re
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import config
 
 app = Flask(__name__, static_folder=os.path.abspath('/Users/NolanRoth/Desktop/ProjectWebsite'))
-app.config['SECRET_KEY'] = config.app_secret_key
+app.config['SECRET_KEY'] = os.environ.get('app_secret_key')
 app.jinja_options['extensions'].append('jinja2.ext.do')
 
 # change this to dev to use development database and prod to use production database
@@ -20,7 +19,7 @@ if ENV == 'dev':
 	app.config['SQLALCHEMY_DATABASE_URI'] = config.dev_database_uri
 else:
 	app.debug = False
-	app.config['SQLALCHEMY_DATABASE_URI'] = config.prod_database_uri
+	app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('prod_database_uri')
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
