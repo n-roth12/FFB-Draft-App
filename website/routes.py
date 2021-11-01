@@ -102,6 +102,7 @@ def rankings_page():
 @login_required
 def pos_rankings_page(pos):
     swap_pos_rank_form = SwapPosRankForm()
+    pos = pos.upper()
 
     if request.method == 'POST':
         form_name = request.form['form-name']
