@@ -28,4 +28,4 @@ login_manager.login_view = "login_page"
 login_manager.login_message_category = "info"
 
 # Comment out when you want to run build_database.py or you will get errors
-from website import routes
+#from website import routes
