@@ -15,6 +15,7 @@ def home_page():
     players = Player.query.order_by('rank').all()
     return render_template('home.html', players=players)
 
+
 @app.route('/rankings', methods=['GET', 'POST'])
 @login_required
 def rankings_page():
@@ -98,6 +99,7 @@ def rankings_page():
     return render_template('rankings.html', players=players, swap_rank_form=swap_rank_form, 
         max_tier=max_tier, add_tier_form=add_tier_form)
 
+
 @app.route('/rankings/<pos>', methods=['GET', 'POST'])
 @login_required
 def pos_rankings_page(pos):
@@ -180,6 +182,7 @@ def pos_rankings_page(pos):
     return render_template('pos_rankings.html', players=pos_players, swap_pos_rank_form=swap_pos_rank_form, 
         max_tier=max_pos_tier, position=pos)
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
     form = RegisterForm()
@@ -187,7 +190,6 @@ def register_page():
 
     if form.validate_on_submit():
         user_to_create = User(username=form.username.data,
-            email_address=form.email_address.data,
             password=form.password1.data)
         db.session.add(user_to_create)
         db.session.commit()
@@ -210,6 +212,7 @@ def register_page():
 
     return render_template('register.html', form=form)
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
     form = LoginForm()
@@ -225,11 +228,13 @@ def login_page():
 
     return render_template('login.html', form=form)
 
+
 @app.route('/logout')
 def logout_page():
     logout_user()
     flash('You have been logged out!', category='info')
     return redirect(url_for("home_page"))
+
 
 @app.route('/draft')
 @login_required

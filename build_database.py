@@ -2,6 +2,7 @@ from website.models import Player, User, Rank
 from website import db
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 import json
 import os
 import re
@@ -11,6 +12,7 @@ import re
 # popular fantasy football websites.
 
 def build():
+    db.session.commit()
     db.drop_all()
     db.create_all()
     db.session.commit()
@@ -25,7 +27,12 @@ def scrape():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
 
-    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+    try:
+        import config
+    except ModuleNotFoundError:
+        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+    else:
+        driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=chrome_options)
 
     fp_scrape(chrome_options, driver)
     sport_news_scrape(chrome_options, driver)
@@ -71,7 +78,6 @@ def fp_scrape(opts, driver):
 def ffb_calc_scrape(opts, driver):
     print('Scraping Fantasy Football Calculator rankings...')
 
-    #driver = webdriver.Chrome('/Users/NolanRoth/Desktop/ProjectWebsite/chromedriver', chrome_options=opts)
     driver.get('https://fantasyfootballcalculator.com/rankings/ppr')
 
     javaScript = "window.scrollBy(0,1000);"
@@ -117,7 +123,6 @@ def ffb_calc_scrape(opts, driver):
 def sport_news_scrape(opts, driver):
     print('Scraping Sporting News rankings...')
 
-    #driver = webdriver.Chrome('chromedriver', chrome_options=opts)
     driver.get('https://www.sportingnews.com/us/fantasy/news/2021-fantasy-football-rankings-top-200-cheat-sheet/1mz21lwlgdyfa1asbqdsrib2az')
 
     javaScript = "window.scrollBy(0,1000);"
