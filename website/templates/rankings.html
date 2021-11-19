@@ -20,7 +20,12 @@
 			</div>
 		</div>
 		<div class="text-center row">
-			<p style=""class="col">Filter By Position: <a href="{{ url_for('rankings_page') }}">All</a> | <a href="{{ url_for('pos_rankings_page', pos='qb') }}">QB</a> | <a href="{{ url_for('pos_rankings_page', pos='rb') }}">RB</a> | <a href="{{ url_for('pos_rankings_page', pos='wr') }}">WR</a> | <a href="{{ url_for('pos_rankings_page', pos='te') }}">TE</a> 
+			<p style=""class="col">Filter By Position: 
+				<a href="{{ url_for('rankings_page') }}">All</a> | 
+				<a href="{{ url_for('pos_rankings_page', pos='qb') }}">QB</a> | 
+				<a href="{{ url_for('pos_rankings_page', pos='rb') }}">RB</a> | 
+				<a href="{{ url_for('pos_rankings_page', pos='wr') }}">WR</a> | 
+				<a href="{{ url_for('pos_rankings_page', pos='te') }}">TE</a> 
 			</p>
 		</div>
 		<div class="row">
@@ -50,7 +55,13 @@
 					{% if tiers|length < 1 or player.custom_tier != tiers[-1] %}
 						{% do tiers.append(player.custom_tier) %}
 						<tr>
-							<td class="bg-secondary">Tier {{ player.custom_tier }}</td>
+							<td class="bg-secondary text-center">Tier {{ player.custom_tier }}
+								{% if player.custom_tier > 1 %}
+									<button class="btn btn-outline-warning btn-sm ml-3"
+										data-toggle="modal"
+										data-target="#Modal-EditTier-{{ player.custom_tier }}">Edit</button>
+								{% endif %}
+								</td>
 						</tr>
 					{% endif %}
 					<tr class="player-row" id="{{ player.id }}-row">
@@ -63,7 +74,9 @@
 						<td class="text-center">{{ player[0].ffb_calc_rank }}</td>
 						<td class="text-center">{{ player[0].sport_news_rank }}</td>
 						<td class="text-center">
-								<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapRank-{{ player[0].id }}">Change</button>
+								<button class="btn btn-outline btn-outline-warning btn-sm" 
+									data-toggle="modal" 
+									data-target="#Modal-SwapRank-{{ player[0].id }}">Change</button>
 						</td>
 					</tr>
 				{% endfor %}

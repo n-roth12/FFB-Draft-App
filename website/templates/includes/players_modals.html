@@ -74,3 +74,38 @@
 	</div>
 </div>
 
+<div class="modal fade" id="Modal-EditTier-{{ player.custom_tier }}"
+	tabindex="-1"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="ModalLabel" style="color: white;">
+					Tier {{ player.custom_tier }}
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="POST">
+					{{ edit_tier_form.hidden_tag()}}
+					<p style="color: white;"> 
+						Enter new rank for this tier to start at:
+					</p>
+					{{ edit_tier_form.new_cutoff(class="form-control", placeholder="New Cutoff") }}
+					<br>
+					<input type="hidden" name="tier" value="{{ player.custom_tier }}">
+					<input type="hidden" name="old_cutoff" value="{{ player.custom_rank }}">
+					<input type="hidden" name="form-name" value="edit-tier-form">
+					{{ edit_tier_form.submit(class="btn btn-outline-success btn-block") }}
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">
+					Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

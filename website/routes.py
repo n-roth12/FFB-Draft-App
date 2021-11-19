@@ -1,7 +1,7 @@
 from website import app
 from flask import render_template, redirect, url_for, flash, request
 from website.models import Player, User, Rank
-from website.forms import RegisterForm, LoginForm, SwapRankForm, AddTierForm, SwapPosRankForm
+from website.forms import RegisterForm, LoginForm, SwapRankForm, AddTierForm, SwapPosRankForm, EditTierForm
 from website import db
 from flask_login import login_user, logout_user, login_required, current_user
 from selenium import webdriver
@@ -21,6 +21,7 @@ def home_page():
 def rankings_page():
     swap_rank_form = SwapRankForm()
     add_tier_form = AddTierForm()
+    edit_tier_form = EditTierForm()
 
     if request.method == 'POST':
         form_name = request.form['form-name']
@@ -34,11 +35,12 @@ def rankings_page():
                 # This triggers when the swapped player is being moved down in the rankings (to a larger rank number)
                 if new_rank > player1_object.custom_rank:
                     pos_rank_changes = []
-                    above_players = db.session.query(Rank).filter(
-                        Rank.user_id==current_user.id, 
-                        Rank.custom_rank <= new_rank, 
-                        Rank.custom_rank > player1_object.custom_rank).order_by(
-                        Rank.custom_rank).all()
+                    above_players = db.session.query(Rank) \
+                        .filter(Rank.user_id==current_user.id, 
+                            Rank.custom_rank <= new_rank, 
+                            Rank.custom_rank > player1_object.custom_rank) \
+                        .order_by(Rank.custom_rank) \
+                        .all()
                     for player in above_players:
                         if player.position == player1_object.position:
                             pos_rank_changes.append(player.custom_pos_rank)
@@ -90,6 +92,41 @@ def rankings_page():
             elif add_tier_form.errors != {}:
                 for err_msg in add_tier_form.errors.values():
                     flash(f'There was an error with creating a new tier {err_msg}', category='danger')
+
+        if form_name == 'edit-tier-form':
+            if edit_tier_form.validate_on_submit():
+                old_cutoff = edit_tier_form.old_cutoff.data 
+                new_cutoff = edit_tier_form.new_cutoff.data
+                tier = edit_tier_form.tier.data
+
+                # here, we need to move all players with rank between the old and
+                # new cutoff to the to the tier being edited
+                if old_cutoff > new_cutoff:
+                    players_to_adjust = db.session.query(Rank) \
+                        .filter(Rank.user_id == current_user.id,
+                            Rank.custom_rank >= new_cutoff,
+                            Rank.custom_rank < old_cutoff) \
+                        .all()
+                    for player in players_to_adjust:
+                        player.custom_tier = tier
+                        db.session.commit()
+
+                # here, we need to move all players with rank between the old and 
+                # new cutoff to the higher (smaller number) tier 
+                elif new_cutoff > old_cutoff:
+                    players_to_adjust = db.session.query(Rank) \
+                        .filter(Rank.user_id == current_user.id,
+                            Rank.custom_rank >= old_cutoff,
+                            Rank.custom_rank < new_cutoff) \
+                        .all()
+                    for player in players_to_adjust:
+                        player.custom_tier = tier - 1
+                        db.session.commit()
+
+            if edit_tier_form.errors != {}:
+                for err_msg in edit_tier_form.errors.values():
+                    flash(f'There was an error with editing the tier {err_msg}', category='danger')           
+
     
     players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Rank.custom_pos_rank).join(
         Rank, Player.id == Rank.player_id).filter(
@@ -97,7 +134,7 @@ def rankings_page():
         Rank.custom_rank).all()
     max_tier = players[-1].custom_tier
     return render_template('rankings.html', players=players, swap_rank_form=swap_rank_form, 
-        max_tier=max_tier, add_tier_form=add_tier_form)
+        max_tier=max_tier, add_tier_form=add_tier_form, edit_tier_form=edit_tier_form)
 
 
 @app.route('/rankings/<pos>', methods=['GET', 'POST'])
