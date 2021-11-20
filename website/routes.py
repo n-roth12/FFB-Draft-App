@@ -1,7 +1,7 @@
 from website import app
 from flask import render_template, redirect, url_for, flash, request
 from website.models import Player, User, Rank
-from website.forms import RegisterForm, LoginForm, SwapRankForm, AddTierForm, SwapPosRankForm, EditTierForm
+from website.forms import RegisterForm, LoginForm, SwapRankForm, AddTierForm, SwapPosRankForm, EditTierForm, DeleteTierForm
 from website import db
 from flask_login import login_user, logout_user, login_required, current_user
 from selenium import webdriver
@@ -22,6 +22,7 @@ def rankings_page():
     swap_rank_form = SwapRankForm()
     add_tier_form = AddTierForm()
     edit_tier_form = EditTierForm()
+    delete_tier_form = DeleteTierForm()
 
     if request.method == 'POST':
         form_name = request.form['form-name']
@@ -125,7 +126,17 @@ def rankings_page():
 
             if edit_tier_form.errors != {}:
                 for err_msg in edit_tier_form.errors.values():
-                    flash(f'There was an error with editing the tier {err_msg}', category='danger')           
+                    flash(f'There was an error with editing the tier {err_msg}', category='danger')
+
+        if form_name == 'delete-tier-form':
+            if delete_tier_form.validate_on_submit():
+                players_to_adjust = db.session.query(Rank) \
+                    .filter(Rank.user_id == current_user.id,
+                        Rank.custom_tier == delete_tier_form.tier.data) \
+                    .all()
+                for player in players_to_adjust:
+                    player.custom_tier = delete_tier_form.tier.data - 1
+                    db.session.commit()           
 
     
     players = db.session.query(Player, Rank.custom_rank, Rank.custom_tier, Rank.custom_pos_rank).join(
@@ -134,7 +145,8 @@ def rankings_page():
         Rank.custom_rank).all()
     max_tier = players[-1].custom_tier
     return render_template('rankings.html', players=players, swap_rank_form=swap_rank_form, 
-        max_tier=max_tier, add_tier_form=add_tier_form, edit_tier_form=edit_tier_form)
+        max_tier=max_tier, add_tier_form=add_tier_form, edit_tier_form=edit_tier_form, 
+        delete_tier_form=delete_tier_form)
 
 
 @app.route('/rankings/<pos>', methods=['GET', 'POST'])

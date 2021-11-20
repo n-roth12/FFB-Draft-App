@@ -30,7 +30,14 @@
 		</div>
 		<div class="row">
 			<div class="col text-center">
-				<button class="btn btn-primary" data-toggle="modal" data-target="#Modal-AddTier-{{ max_tier }}">Add Tier</button>
+				<button class="btn btn-primary" 
+					data-toggle="modal" 
+					data-target="#Modal-AddTier-{{ max_tier }}">Add Tier</button>
+				{% if players[-1].custom_tier != 1 %}
+					<button class="btn btn-danger"
+						data-toggle="modal"
+						data-target="#Modal-DeleteTier-{{ players[-1].custom_tier }}">Delete Tier</button>
+				{% endif %}
 			</div>
 		</div>
 		<br>

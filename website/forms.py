@@ -100,5 +100,9 @@ class EditTierForm(FlaskForm):
 	submit = SubmitField(label='Submit Change')
 
 
+class DeleteTierForm(FlaskForm):
 
+	tier = IntegerField(label='Tier', 
+		validators=[DataRequired()])
+	submit = SubmitField(label='Delete Tier')
 

@@ -109,3 +109,41 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="Modal-DeleteTier-{{ players[-1].custom_tier }}"
+	tabindex="-1"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="ModalLabel" style="color: white;">
+					Delete Tier {{ players[-1].custom_tier }}
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="POST">
+					{{ delete_tier_form.hidden_tag()}}
+					<p style="color: white;"> 
+						This will delete Tier {{ players[-1].custom_tier }},
+						moving all players currently in Tier {{ players[-1].custom_tier }} to tier {{ players[-1].custom_tier - 1 }}.
+					</p>
+					<p style="color: white;">
+						Press button below if you would like to make this change.
+					</p>
+					<br>
+					<input type="hidden" name="tier" value="{{ players[-1].custom_tier }}">
+					<input type="hidden" name="form-name" value="delete-tier-form">
+					{{ delete_tier_form.submit(class="btn btn-outline-success btn-block") }}
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">
+					Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
