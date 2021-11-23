@@ -52,216 +52,219 @@
    </div>
 </div>
 
-<div class="row justify-content-center">
-	<button class="btn btn-primary hidden mr-1" id="show-top-player-btn" onclick="flip_top()">Show Top Players</button>
-	<button class="btn btn-outline-primary mr-1" id="hide-top-player-btn" onclick="flip_top()">Hide Top Players</button>
-	<button class="btn btn-primary hidden ml-1" id="show-value-player-btn" onclick="flip_value()">Show Top Values</button>
-	<button class="btn btn-outline-primary ml-1" id="hide-value-player-btn" onclick="flip_value()">Hide Top Values</button>
-</div>
+<div class="container-fluid">
 
-<div class="container advice-bar" id="top-player-bar">
-	<h2>Top Players by Position:</h1>
-	<div class="row">
-		<div class="col-6 col-sm-3">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th scope="col">QB:</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for qb in qbs|sort(attribute='custom_rank') %}
-						<tr>
-							<td class="top-qb p-0 hidden text-left" id="top-player-{{ qb[0].id }}">#{{ qb.custom_rank }}. {{ qb[0].name }} - Tier {{ qb.custom_tier }}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-
-		<div class="col-6 col-sm-3">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th scope="col">RB:</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for rb in rbs|sort(attribute='custom_rank') %}
-						<tr>
-							<td class="top-rb p-0 hidden text-left" id="top-player-{{ rb[0].id }}">#{{ rb.custom_rank }}. {{ rb[0].name }} - Tier {{ rb.custom_tier }}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-
-		<div class="col-6 col-sm-3">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th scope="col">WR:</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for wr in wrs|sort(attribute='custom_rank') %}
-						<tr>
-							<td class="top-wr p-0 hidden text-left" id="top-player-{{ wr[0].id }}">#{{ wr.custom_rank }}. {{ wr[0].name }} - Tier {{ wr.custom_tier }}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-
-		<div class="col-6 col-sm-3">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th scope="col">TE:</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for te in tes|sort(attribute='custom_rank') %}
-						<tr>
-							<td class="top-te p-0 hidden text-left" id="top-player-{{ te[0].id }}">#{{ te.custom_rank }}. {{ te[0].name }} - Tier {{ te.custom_tier }}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div>
-
-<div class="container advice-bar" id="value-player-bar">
-	<h2>Top Values by Position:</h1>
-	<div class="row">
-
-		<div class="col-6 col-sm-3">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th scope="col">QB:</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for qb in qbs %}
-						<tr>
-							<td class="value-qb p-0 hidden text-left" id="value-player-{{ qb[0].id }}">#{{ qb.custom_rank }}. {{ qb[0].name }}, ADP: {{ qb.rank }}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-
-		<div class="col-6 col-sm-3">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th scope="col">RB:</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for rb in rbs %}
-						<tr>
-							<td class="value-rb p-0 hidden text-left" id="value-player-{{ rb[0].id }}">#{{ rb.custom_rank }}. {{ rb[0].name }}, ADP: {{ rb.rank }}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-
-		<div class="col-6 col-sm-3">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th scope="col">WR:</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for wr in wrs %}
-						<tr>
-							<td class="value-wr p-0 hidden text-left" id="value-player-{{ wr[0].id }}">#{{ wr.custom_rank }}. {{ wr[0].name }}, ADP: {{ wr.rank }}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-
-		<div class="col-6 col-sm-3">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th scope="col">TE:</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for te in tes %}
-						<tr>
-							<td class="value-te p-0 hidden text-left" id="value-player-{{ te[0].id }}">#{{ te.custom_rank }}. {{ te[0].name }}, ADP: {{ te.rank }}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div>
-
-<div id="draft-body" class="row my-5 hidden">
-
-	<div class="col-sm-3">
-		<h2 class="text-center">Draftable Players</h2>
-		<table id="draftable-players-table" class="table table-hover table-sm" style="margin-left:auto; margin-right:auto;">
-			<thead>
-				<tr>
-					<th scope="col">Rank</th>
-					<th scope="col">Player</th>
-					<th scope="col"></th>
-					<th scope="col">ADP</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% set counter = [0] %}
-				{% for player in players %}
-					{% if player.custom_tier > counter|last %}
-						<tr class="tier-row">
-							<td></td><td>Tier {{ player.custom_tier }}</td><td></td><td></td>
-						</tr>
-					{% endif %}
-					{% if counter.append(player.custom_tier) %}
-					{% endif %}
-					<tr class="player-row" id="{{ player[0].id }}-row">
-						<td class="font-weight-bolder">{{ player.custom_rank }}.</td>
-						<td>
-							<div>
-								<p class="text-left m-0 p-0 font-weight-bolder name">{{ player[0].name }}</p>
-								<p class="text-left m-0 p-0 pos">{{ player[0].position }}, {{ player[0].team }}</p>
-							</div>
-						</td>
-						<td class="text-center options-col">
-							<button class="btn btn-outline-primary btn-sm draft-btn hidden" value="{{ player[0].id }}">Draft</button>
-						</td>
-						<td>{{ player[0].rank }}</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+	<div class="row justify-content-center">
+		<button class="btn btn-primary hidden mr-1" id="show-top-player-btn" onclick="flip_top()">Show Top Players</button>
+		<button class="btn btn-outline-primary mr-1" id="hide-top-player-btn" onclick="flip_top()">Hide Top Players</button>
+		<button class="btn btn-primary hidden ml-1" id="show-value-player-btn" onclick="flip_value()">Show Top Values</button>
+		<button class="btn btn-outline-primary ml-1" id="hide-value-player-btn" onclick="flip_value()">Hide Top Values</button>
 	</div>
 
-	<div class="col-sm-9">
-		<h2 class="text-center">Draft Board</h2>
-		<div id="draft-board-wrapper">
-			<table id="draft-board" class="table">
+	<section class="container advice-bar p-3" id="top-player-bar">
+		<h2>Top Players by Position:</h2>
+		<div class="row">
+			<div class="col-6 col-sm-3">
+				<table class="table-hover">
+					<thead>
+						<tr>
+							<th scope="col">QB:</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for qb in qbs|sort(attribute='custom_rank') %}
+							<tr>
+								<td class="top-qb p-0 hidden text-left" id="top-player-{{ qb[0].id }}">#{{ qb.custom_rank }}. {{ qb[0].name }} - Tier {{ qb.custom_tier }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="col-6 col-sm-3">
+				<table class="table-hover">
+					<thead>
+						<tr>
+							<th scope="col">RB:</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for rb in rbs|sort(attribute='custom_rank') %}
+							<tr>
+								<td class="top-rb p-0 hidden text-left" id="top-player-{{ rb[0].id }}">#{{ rb.custom_rank }}. {{ rb[0].name }} - Tier {{ rb.custom_tier }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="col-6 col-sm-3">
+				<table class="table-hover">
+					<thead>
+						<tr>
+							<th scope="col">WR:</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for wr in wrs|sort(attribute='custom_rank') %}
+							<tr>
+								<td class="top-wr p-0 hidden text-left" id="top-player-{{ wr[0].id }}">#{{ wr.custom_rank }}. {{ wr[0].name }} - Tier {{ wr.custom_tier }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="col-6 col-sm-3">
+				<table class="table-hover">
+					<thead>
+						<tr>
+							<th scope="col">TE:</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for te in tes|sort(attribute='custom_rank') %}
+							<tr>
+								<td class="top-te p-0 hidden text-left" id="top-player-{{ te[0].id }}">#{{ te.custom_rank }}. {{ te[0].name }} - Tier {{ te.custom_tier }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>
+
+	<section class="container advice-bar p-3" id="value-player-bar">
+		<h2>Top Values by Position:</h2>
+		<div class="row">
+
+			<div class="col-6 col-sm-3">
+				<table class="table-hover">
+					<thead>
+						<tr>
+							<th scope="col">QB:</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for qb in qbs %}
+							<tr>
+								<td class="value-qb p-0 hidden text-left" id="value-player-{{ qb[0].id }}">#{{ qb.custom_rank }}. {{ qb[0].name }}, ADP: {{ qb.rank }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="col-6 col-sm-3">
+				<table class="table-hover">
+					<thead>
+						<tr>
+							<th scope="col">RB:</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for rb in rbs %}
+							<tr>
+								<td class="value-rb p-0 hidden text-left" id="value-player-{{ rb[0].id }}">#{{ rb.custom_rank }}. {{ rb[0].name }}, ADP: {{ rb.rank }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="col-6 col-sm-3">
+				<table class="table-hover">
+					<thead>
+						<tr>
+							<th scope="col">WR:</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for wr in wrs %}
+							<tr>
+								<td class="value-wr p-0 hidden text-left" id="value-player-{{ wr[0].id }}">#{{ wr.custom_rank }}. {{ wr[0].name }}, ADP: {{ wr.rank }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="col-6 col-sm-3">
+				<table class="table-hover">
+					<thead>
+						<tr>
+							<th scope="col">TE:</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for te in tes %}
+							<tr>
+								<td class="value-te p-0 hidden text-left" id="value-player-{{ te[0].id }}">#{{ te.custom_rank }}. {{ te[0].name }}, ADP: {{ te.rank }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>
+
+	<div id="draft-body" class="my-5 hidden row">
+
+		<section class="col-sm-3 p-3 m-3">
+			<h2 class="text-center">Draftable Players</h2>
+			<table id="draftable-players-table" class="table table-hover table-sm" style="margin-left:auto; margin-right:auto;">
 				<thead>
-					<tr class="row">
+					<tr>
+						<th scope="col">Rank</th>
+						<th scope="col">Player</th>
+						<th scope="col"></th>
+						<th scope="col">ADP</th>
 					</tr>
 				</thead>
-
 				<tbody>
+					{% set counter = [0] %}
+					{% for player in players %}
+						{% if player.custom_tier > counter|last %}
+							<tr class="tier-row">
+								<td></td><td>Tier {{ player.custom_tier }}</td><td></td><td></td>
+							</tr>
+						{% endif %}
+						{% if counter.append(player.custom_tier) %}
+						{% endif %}
+						<tr class="player-row" id="{{ player[0].id }}-row">
+							<td class="font-weight-bolder">{{ player.custom_rank }}.</td>
+							<td>
+								<div>
+									<p class="text-left m-0 p-0 font-weight-bolder name">{{ player[0].name }}</p>
+									<p class="text-left m-0 p-0 pos" style="font-size: 9pt;">{{ player[0].position }}, {{ player[0].team }}</p>
+								</div>
+							</td>
+							<td class="text-center options-col">
+								<button class="btn btn-outline-primary btn-sm draft-btn hidden" value="{{ player[0].id }}">Draft</button>
+							</td>
+							<td>{{ player[0].rank }}</td>
+						</tr>
+					{% endfor %}
 				</tbody>
 			</table>
-		</div>
-	</div>
+		</section>
 
+		<div class="col-sm-8 p-3 m-3">
+			<h2 class="text-center">Draft Board</h2>
+			<div id="draft-board-wrapper">
+				<table id="draft-board" class="table">
+					<thead>
+						<tr class="row">
+						</tr>
+					</thead>
+
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
 </div>
 
 
@@ -292,8 +295,6 @@
 	}
 
 	.card {
-		height: 70px;
-		width: 110px;
 		text-align: center;
 		margin:  1px 1px 1px 1px;
 	}
@@ -329,11 +330,12 @@
 		background-color: #C0392B;
 	}
 
-	.advice-bar {
-		border: 3px solid grey;
+	section {
+		border: 1px solid grey;
 		border-radius: 5px;
 		margin-top: 5px;
 		margin-bottom: 5px;
+		background-color: white;
 	}
 
 	.advice-bar tr {
