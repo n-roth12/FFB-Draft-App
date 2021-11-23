@@ -9,8 +9,20 @@
    <div class="mx-auto my-1">
    	<h1 class="display-4 font-weight-normal" style="color: white">Draft Assistant</h1>
    	<br>
-   	<form class="form-group row" id="draft-options">
-   		<div class="col-1 offset-4">
+   	<form class="form-group row justify-content-center" id="draft-options">
+   		<div class="col-12 col-sm-4 col-xlg-2">
+   			<label for="num_teams" style="color:white;">Choose number of teams:</label>
+   			<select name="num_teams" id="num_teams" class="form-control" onchange="update_pos()">
+   				<option value=6>6</option>
+   				<option value=7>7</option>
+   				<option value=8>8</option>
+   				<option value=9>9</option>
+   				<option value=10 selected>10</option>
+   				<option value=11>11</option>
+   				<option value=12>12</option>
+   			</select>
+   		</div>
+   		<div class="col-12 col-sm-4 col-xlg-2">
    			<label for="draft_pos" style="color:white">Choose a Draft Position</label>
    			<select name="draft_pos" id="draft_pos" class="form-control">
    				<option value=1>1</option>
@@ -21,23 +33,13 @@
    				<option value=6>6</option>
    				<option value=7>7</option>
    				<option value=8>8</option>
-   				<option value=1>9</option>
-   				<option value=10>10</option>
-   				<option value=11>11</option>
-   				<option value=12>12</option>
+   				<option class="hidden" value=9>9</option>
+   				<option class="hidden" value=10>10</option>
+   				<option class="hidden" value=11>11</option>
+   				<option class="hidden" value=12>12</option>
    			</select>
    		</div>
-   		<div class="col-1">
-   			<label for="num_teams" style="color:white;">Choose number of teams:</label>
-   			<select name="num_teams" id="num_teams" class="form-control">
-   				<option value=8>8</option>
-   				<option value=9>9</option>
-   				<option value=10>10</option>
-   				<option value=11>11</option>
-   				<option value=12>12</option>
-   			</select>
-   		</div>
-   		<div class="col-2">
+   		<div class="col-12 col-sm-4 col-xlg-2">
    			<label for="draft_type" style="color:white;">Choose a draft type:</label>
    			<select name="draft_type" id="draft_type" class="form-control">
    				<option value="snake">Snake</option>
@@ -430,6 +432,21 @@
 	function reset_draft() {
 		location.reload()
 	}
+
+	function update_pos() {
+		draft_pos = document.querySelector('#draft_pos').value
+		num_teams = document.querySelector('#num_teams').value
+		draft_pos_options = document.querySelector("#draft_pos").querySelectorAll('option')
+		for (var i = 7; i < num_teams; i++) {
+			draft_pos_options[i].classList.remove("hidden")
+		}
+		for (var j = num_teams; j < 12; j++) {
+			draft_pos_options[j].classList.add("hidden")
+		}
+		document.querySelector('#draft_pos').value = 1
+	}
+
+	
 
 </script>
 
