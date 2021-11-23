@@ -125,51 +125,55 @@
 
 <div id="draft-body" class="row mt-5 hidden">
 
-	<div class="col-sm-3 overflow-auto" style="max-height: 70vh;">
-		<table id="draftable-players-table" class="table table-hover table-sm" style="margin-left:auto; margin-right:auto;">
-			<thead>
-				<h2 class="text-center">Draftable Players</h2>
-				<tr>
-					<th scope="col" class="text-center">Your Rank</th>
-					<th scope="col" class="text-center"></th>
-					<th scope="col" class="text-center">ADP</th>
-					<th scope="col" class="text-center options-col"></th>
-				</tr>
-			</thead>
-			<tbody>
-				{% set counter = [0] %}
-				{% for player in players %}
-					{% if player.custom_tier > counter|last %}
-						<tr class="tier-row">
-							<td>Tier {{ player.custom_tier }}</td>
-						</tr>
-					{% endif %}
-					{% if counter.append(player.custom_tier) %}
-					{% endif %}
-					<tr class="player-row" id="{{ player[0].id }}-row">
-						<td>{{ player.custom_rank }}</td>
-						<td class="text-left name">{{ player[0].name }}, {{ player[0].position }}</td>
-						<td>{{ player[0].rank }}
-						<td class="text-center options-col">
-							<button class="btn btn-outline-primary btn-sm draft-btn hidden" value="{{ player[0].id }}">Draft</button>
-						</td>
+	<div class="col-sm-3">
+		<h2 class="text-center">Draftable Players</h2>
+		<div class="overflow-auto" style="max-height: 70vh;">
+			<table id="draftable-players-table" class="table table-hover table-sm" style="margin-left:auto; margin-right:auto;">
+				<thead>
+					<tr>
+						<th scope="col" class="text-center">Your Rank</th>
+						<th scope="col" class="text-center"></th>
+						<th scope="col" class="text-center">ADP</th>
+						<th scope="col" class="text-center options-col"></th>
 					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					{% set counter = [0] %}
+					{% for player in players %}
+						{% if player.custom_tier > counter|last %}
+							<tr class="tier-row">
+								<td>Tier {{ player.custom_tier }}</td>
+							</tr>
+						{% endif %}
+						{% if counter.append(player.custom_tier) %}
+						{% endif %}
+						<tr class="player-row" id="{{ player[0].id }}-row">
+							<td>{{ player.custom_rank }}</td>
+							<td class="text-left name">{{ player[0].name }}, {{ player[0].position }}</td>
+							<td>{{ player[0].rank }}</td>
+							<td class="text-center options-col">
+								<button class="btn btn-outline-primary btn-sm draft-btn hidden" value="{{ player[0].id }}">Draft</button>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
 	</div>
 
-	<div class="col-sm-9 overflow-auto" style="max-width: 100vw; max-height: 100vh;">
-		<table id="draft-board">
-			<thead>
-				<h2 class="text-center">Draft Board</h2>
-				<tr class="row">
-				</tr>
-			</thead>
+	<div class="col-sm-9">
+		<h2 class="text-center">Draft Board</h2>
+		<div class="overflow-auto" style="max-width: 100vw; max-height: 100vh;">
+			<table id="draft-board">
+				<thead>
+					<tr class="row">
+					</tr>
+				</thead>
 
-			<tbody>
-			</tbody>
-		</table>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
 	</div>
 
 </div>
