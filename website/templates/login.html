@@ -5,6 +5,21 @@ Login Page
 {% endblock %}
 
 {% block content %}
+<style>
+    @media (max-width: 600px) {
+        .form-signin, .form-register {
+            width: 300px;
+        }
+    }
+
+    @media (min-width: 600px) {
+        .form-signin, .form-register {
+            width: 500px;
+        }
+    }
+</style>
+
+
 <body class="text-center">
     <div class="container mt-5 mb-5">
         <form method="POST" class="form-signin mx-auto">
@@ -35,17 +50,4 @@ Login Page
     </div>
 </body>
 
-<style>
-    @media (max-width: 600px) {
-        .form-signin, .form-register {
-            width: 300px;
-        }
-    }
-
-    @media (min-width: 600px) {
-        .form-signin, .form-register {
-            width: 500px;
-        }
-    }
-</style>
 {% endblock %}

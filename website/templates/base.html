@@ -10,81 +10,6 @@
 		</title>
 	</head>
 
-	<body style="background-color: #F7F7F7; color: #1D2228; padding: 50px 0px 0px 0px; z-index: 0;">
-		<nav id="navbar" class="mb-5 navbar navbar-light navbar-expand-sm fixed-top" style="background-color: #FFC108;">
-			<div class="container">
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarNav">
-					<ul class="navbar-nav mr-auto">
-						<li {% if request.path == '/home'  or request.path == '/'%} class="nav-item active" 
-							{% else %} class="nav-item" {% endif %}>
-							<a class="nav-link" href="{{ url_for('home_page') }}" style="color: #1D2228">Home</a>
-						</li>
-						<li {% if request.path.startswith('/rankings') %} class="nav-item active"
-							{% else %} class="nav-item" {% endif %}>
-							<a class="nav-link" href="{{ url_for('rankings_page') }}" style="color: #1D2228">Rankings</a>
-						</li>
-						<li {% if request.path == '/draft' %} class="nav-item active"
-							{% else %} class="nav-item" {% endif %}>
-							<a class="nav-link" href="{{ url_for('draft_page') }}" style="color: #1D2228">Draft</a>
-						</li>
-					</ul>
-					{% if current_user.is_authenticated %}
-					<ul class="navbar-nav">
-						<li class="nav-item">
-							<a class="nav-link">
-								<i class="fas fa-football-ball" style="color: #1D2228"></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" style="color: #1D2228">Welcome, {{ current_user.username }}</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{ url_for('logout_page') }}" style="color: #1D2228">Logout</a>
-						</li>
-					</ul>
-					{% else %}
-					<ul class="navbar-nav">
-						<li {% if request.path == '/login' %} class="nav-item active"
-							{% else %} class="nav-item" {% endif %}>
-							<a class="nav-link" href="{{ url_for('login_page') }}" style="color: #1D2228">Login</a>
-						</li>
-						<li {% if request.path == '/register' %} class="nav-item active"
-							{% else %} class="nav-item" {% endif %}>
-							<a class="nav-link" href="{{ url_for('register_page') }}" style="color: #1D2228">Register</a>
-						</li>
-					</ul>
-				</div>
-				{% endif %}
-			</div>
-		</nav>
-		{% with messages = get_flashed_messages(with_categories=true) %}
-			{% if messages %}
-				{% for category, message in messages %}
-					<div class="alert alert-{{ category }}">
-						<button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						{{ message }}
-					</div>
-				{% endfor %}
-			{% endif %}
-		{% endwith %}
-
-	{% block content %}
-	{% endblock %}
-
-	<!-- Optional JavaScript; choose one of the two! -->
-	<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-	<script src="https://kit.fontawesome.com/4832798b5c.js" crossorigin="anonymous"></script>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-
-	</body>
-
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 		@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
@@ -135,6 +60,81 @@
 		}
 	</style>
 
+
+	<body style="background-color: #F7F7F7; color: #1D2228; padding: 50px 0px 0px 0px; z-index: 0;">
+		<nav id="navbar" class="mb-5 navbar navbar-light navbar-expand-sm fixed-top" style="background-color: #FFC108;">
+			<div class="container">
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNav">
+					<ul class="navbar-nav mr-auto">
+						<li {% if request.path == '/home'  or request.path == '/'%} class="nav-item active" 
+							{% else %} class="nav-item" {% endif %}>
+							<a class="nav-link" href="{{ url_for('home_page') }}" style="color: #1D2228">Home</a>
+						</li>
+						<li {% if request.path.startswith('/rankings') %} class="nav-item active"
+							{% else %} class="nav-item" {% endif %}>
+							<a class="nav-link" href="{{ url_for('rankings_page') }}" style="color: #1D2228">Rankings</a>
+						</li>
+						<li {% if request.path == '/draft' %} class="nav-item active"
+							{% else %} class="nav-item" {% endif %}>
+							<a class="nav-link" href="{{ url_for('draft_page') }}" style="color: #1D2228">Draft</a>
+						</li>
+					</ul>
+					{% if current_user.is_authenticated %}
+					<ul class="navbar-nav">
+						<li class="nav-item">
+							<a class="nav-link">
+								<i class="fas fa-football-ball" style="color: #1D2228"></i>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" style="color: #1D2228">Signed in as <strong>{{ current_user.username }}</strong></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url_for('logout_page') }}" style="color: #1D2228">Logout</a>
+						</li>
+					</ul>
+					{% else %}
+					<ul class="navbar-nav">
+						<li {% if request.path == '/login' %} class="nav-item active"
+							{% else %} class="nav-item" {% endif %}>
+							<a class="nav-link" href="{{ url_for('login_page') }}" style="color: #1D2228">Login</a>
+						</li>
+						<li {% if request.path == '/register' %} class="nav-item active"
+							{% else %} class="nav-item" {% endif %}>
+							<a class="nav-link" href="{{ url_for('register_page') }}" style="color: #1D2228">Register</a>
+						</li>
+					</ul>
+				</div>
+				{% endif %}
+			</div>
+		</nav>
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<div class="alert alert-{{ category }}">
+						<button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						{{ message }}
+					</div>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+
+	{% block content %}
+	{% endblock %}
+
+	<!-- Optional JavaScript; choose one of the two! -->
+	<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+	<script src="https://kit.fontawesome.com/4832798b5c.js" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+	</body>
 
 </html>
 
