@@ -7,7 +7,7 @@ Register Page
 {% block content %}
 <body class="text-center">
 	<div class="container mt-5 mb-5">
-		<form method="POST" class="form-register" style="color:white">
+		<form method="POST" class="form-register mx-auto">
 			{{ form.hidden_tag() }}
 			<br>
          <h1 class="h3 mb-3 font-weight-normal">
@@ -15,14 +15,13 @@ Register Page
          </h1>
          <br>
 			{{ form.username.label() }}
-			{{ form.username(class="form-control", placeholder="User Name") }}
-
+			{{ form.username(class="form-control", placeholder="Enter a User Name") }}
+			<br> 
 			{{ form.password1.label() }}
-			{{ form.password1(class="form-control", placeholder="Password") }}
-
+			{{ form.password1(class="form-control", placeholder="Enter a Password") }}
+			<br>
 			{{ form.password2.label() }}
-			{{ form.password2(class="form-control", placeholder="Confirm Password") }}
-
+			{{ form.password2(class="form-control", placeholder="Confirm your Password") }}
 			<br>
 
             <div class="checkbox mb-3">

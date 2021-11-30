@@ -11,22 +11,24 @@
 	   </div>
 	</div>
 	<div class="container">
-		<div class="row">
-			<div class="col text-center">
-				<p>
-					Select "Change" to adjust the ranking of a specific player. 
-					Select "Add Tier" to add an additional tier to your rankings.
+		<div id="options-bar" class="mb-3">
+			<div class="row" >
+				<div class="col text-center">
+					<p>
+						Select "Change" to adjust the ranking of a specific player. 
+						Select "Add Tier" to add an additional tier to your rankings.
+					</p>
+				</div>
+			</div>
+			<div class="text-center row">
+				<p style=""class="col">Filter By Position: 
+					<a href="{{ url_for('rankings_page') }}">All</a> | 
+					<a href="{{ url_for('pos_rankings_page', pos='qb') }}">QB</a> | 
+					<a href="{{ url_for('pos_rankings_page', pos='rb') }}">RB</a> | 
+					<a href="{{ url_for('pos_rankings_page', pos='wr') }}">WR</a> | 
+					<a href="{{ url_for('pos_rankings_page', pos='te') }}">TE</a> 
 				</p>
 			</div>
-		</div>
-		<div class="text-center row">
-			<p style=""class="col">Filter By Position: 
-				<a href="{{ url_for('rankings_page') }}">All</a> | 
-				<a href="{{ url_for('pos_rankings_page', pos='qb') }}">QB</a> | 
-				<a href="{{ url_for('pos_rankings_page', pos='rb') }}">RB</a> | 
-				<a href="{{ url_for('pos_rankings_page', pos='wr') }}">WR</a> | 
-				<a href="{{ url_for('pos_rankings_page', pos='te') }}">TE</a> 
-			</p>
 		</div>
 		<div class="row">
 			<div class="col text-center">
@@ -96,6 +98,15 @@
 	<style>
 		.tier-row {
 			font-family: monospace;
+		}
+
+		#options-bar {
+			border: 1px solid grey;
+			border-radius: 5px;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			background-color: white;
+			padding: 5px;
 		}
 
 	</style>

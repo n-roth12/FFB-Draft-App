@@ -7,7 +7,7 @@ Login Page
 {% block content %}
 <body class="text-center">
     <div class="container mt-5 mb-5">
-        <form method="POST" class="form-signin" style="color:white">
+        <form method="POST" class="form-signin mx-auto">
             {{ form.hidden_tag() }}
             <br>
             <h1 class="h3 mb-3 font-weight-normal">
@@ -15,15 +15,17 @@ Login Page
             </h1>
             <br>
             {{ form.username.label() }}
-            {{ form.username(class="form-control", placeholder="User Name") }}
+            {{ form.username(class="form-control", placeholder="Enter your User Name") }}
+
+            <br>
 
             {{ form.password.label() }}
-            {{ form.password(class="form-control", placeholder="Password") }}
+            {{ form.password(class="form-control", placeholder="Enter your Password") }}
 
             <br>
 
             <div class="checkbox mb-3">
-               <h6>Do not have an account?</h6>
+               <h6>Don't have an account?</h6>
                <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('register_page') }}">Register</a>
             </div>
 
@@ -32,4 +34,18 @@ Login Page
         </form>
     </div>
 </body>
+
+<style>
+    @media (max-width: 600px) {
+        .form-signin, .form-register {
+            width: 300px;
+        }
+    }
+
+    @media (min-width: 600px) {
+        .form-signin, .form-register {
+            width: 500px;
+        }
+    }
+</style>
 {% endblock %}

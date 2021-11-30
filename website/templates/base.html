@@ -91,25 +91,43 @@
 		body {
 			font-family: 'Inter', sans-serif;
 		}
+		
 		label, h1, h6 {
 			color: #1D2228;
 		}
+
 		.hidden {
 	      display: none;
 	   }
+
 	   .nav-item a {
 	   	color: #1D2228 !important;
 	   }
+
 	   .nav-item:not([class*="active"]) a:hover {
 	   	color: #5e5e5e !important;
 	   }
+
 	   .alert {
 	   	margin: 0;
 	   }
+
 	   .active a {
 	   	text-decoration: underline;
 	   	text-decoration-thickness: 0.15em;
 	   }
+
+	   @media (max-width: 600px) {
+        .form-signin, .form-register {
+            width: 300px;
+        }
+    	}
+
+		@media (min-width: 600px) {
+			.form-signin, .form-register {
+				width: 500px;
+			}
+		}
 	</style>
 
 

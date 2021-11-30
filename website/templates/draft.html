@@ -54,7 +54,7 @@
 
 <div class="container-fluid">
 
-	<div class="row justify-content-center">
+	<div class="row justify-content-center mb-3">
 		<button class="btn btn-primary hidden mr-1" id="show-top-player-btn" onclick="flip_top()">Show Top Players</button>
 		<button class="btn btn-outline-primary mr-1" id="hide-top-player-btn" onclick="flip_top()">Hide Top Players</button>
 		<button class="btn btn-primary hidden ml-1" id="show-value-player-btn" onclick="flip_value()">Show Top Values</button>
@@ -208,19 +208,11 @@
 		</div>
 	</section>
 
-	<div id="draft-body" class="my-5 hidden row">
+	<div id="draft-body" class="my-5 mx-auto hidden row">
 
-		<section class="col-sm-3 p-3 m-3">
+		<section class="col-12 col-lg-3 p-3" style="height: 70vh; overflow: auto;">
 			<h2 class="text-center">Draftable Players</h2>
-			<table id="draftable-players-table" class="table table-hover table-sm" style="margin-left:auto; margin-right:auto;">
-				<thead>
-					<tr>
-						<th scope="col">Rank</th>
-						<th scope="col">Player</th>
-						<th scope="col"></th>
-						<th scope="col">ADP</th>
-					</tr>
-				</thead>
+			<table id="draftable-players-table" class="table table-hover table-sm">
 				<tbody>
 					{% set counter = [0] %}
 					{% for player in players %}
@@ -249,7 +241,7 @@
 			</table>
 		</section>
 
-		<div class="col-sm-8 p-3 m-3">
+		<div class="col-12 col-lg-8 m-0 p-0">
 			<h2 class="text-center">Draft Board</h2>
 			<div id="draft-board-wrapper">
 				<table id="draft-board" class="table">
@@ -279,7 +271,7 @@
 	}
 
 	#draft-board {
-		width: 1300px;
+		width: 1100px;
 		overflow: auto;
 	}
 
@@ -356,8 +348,7 @@
 	}
 
 	#draftable-players-table tbody {
-		height: 70vh;
-		overflow-y: auto;
+		overflow: auto;
 	}
 
 	tbody, thead {
@@ -365,8 +356,6 @@
 	}
 
 	#draft-board-wrapper {
-		max-height: 90vh;
-		max-width: 90vw;
 		overflow: auto;
 	}
 </style>
