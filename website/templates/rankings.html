@@ -5,12 +5,12 @@
 {% endblock %}
 
 {% block content %}
-	<div class="jumbotron text-center" style="color:white; background-color:#1D2228;">
+	<div class="jumbotron text-center" style="color: white; background-color: #1D2228;">
 	   <div class=" mx-auto my-1">
 	       <h1 class="display-4 font-weight-normal" style="color: white">Your Custom Overall Rankings</h1>
 	   </div>
 	</div>
-	<div class="container">
+	<div class="container content-wrapper pt-3">
 		<div id="options-bar" class="mb-3">
 			<div class="row" >
 				<div class="col text-center">
@@ -43,8 +43,8 @@
 			</div>
 		</div>
 		<br>
-		<div class="overflow-auto" style="max-width: 100vw;">
-			<table class="table table-sm table-hover table-striped table-dark" style="background-color: #1D2228">
+		<div class="overflow-auto table-responsive rounded" style="max-width: 100vw;">
+			<table class="table table-sm table-hover table-striped table-dark rounded" style="background-color: #1D2228">
 				<thead>
 					<tr>
 						<th scope="col" class="text-center">Custom Rank</th>
@@ -100,12 +100,12 @@
 			font-family: monospace;
 		}
 
-		#options-bar {
-			border: 1px solid grey;
+		.content-wrapper {
+			color: white;
 			border-radius: 5px;
 			margin-top: 5px;
 			margin-bottom: 5px;
-			background-color: white;
+			background-color: #1D2228;
 			padding: 5px;
 		}
 
