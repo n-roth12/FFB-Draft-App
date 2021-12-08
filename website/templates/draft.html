@@ -33,8 +33,8 @@
    				<option value=6>6</option>
    				<option value=7>7</option>
    				<option value=8>8</option>
-   				<option class="hidden" value=9>9</option>
-   				<option class="hidden" value=10>10</option>
+   				<option value=9>9</option>
+   				<option value=10>10</option>
    				<option class="hidden" value=11>11</option>
    				<option class="hidden" value=12>12</option>
    			</select>
@@ -64,7 +64,7 @@
 	<section class="container advice-bar p-3" id="top-player-bar">
 		<h2>Top Players by Position:</h2>
 		<div class="row">
-			<div class="col-6 col-sm-3">
+			<div class="col-12 col-sm-6 col-lg-3">
 				<table class="table-hover">
 					<thead>
 						<tr>
@@ -81,7 +81,7 @@
 				</table>
 			</div>
 
-			<div class="col-6 col-sm-3">
+			<div class="col-12 col-sm-6 col-lg-3">
 				<table class="table-hover">
 					<thead>
 						<tr>
@@ -98,7 +98,7 @@
 				</table>
 			</div>
 
-			<div class="col-6 col-sm-3">
+			<div class="col-12 col-sm-6 col-lg-3">
 				<table class="table-hover">
 					<thead>
 						<tr>
@@ -115,7 +115,7 @@
 				</table>
 			</div>
 
-			<div class="col-6 col-sm-3">
+			<div class="col-12 col-sm-6 col-lg-3">
 				<table class="table-hover">
 					<thead>
 						<tr>
@@ -138,7 +138,7 @@
 		<h2>Top Values by Position:</h2>
 		<div class="row">
 
-			<div class="col-6 col-sm-3">
+			<div class="col-12 col-sm-6 col-lg-3">
 				<table class="table-hover">
 					<thead>
 						<tr>
@@ -155,7 +155,7 @@
 				</table>
 			</div>
 
-			<div class="col-6 col-sm-3">
+			<div class="col-12 col-sm-6 col-lg-3">
 				<table class="table-hover">
 					<thead>
 						<tr>
@@ -172,7 +172,7 @@
 				</table>
 			</div>
 
-			<div class="col-6 col-sm-3">
+			<div class="col-12 col-sm-6 col-lg-3">
 				<table class="table-hover">
 					<thead>
 						<tr>
@@ -189,7 +189,7 @@
 				</table>
 			</div>
 
-			<div class="col-6 col-sm-3">
+			<div class="col-12 col-sm-6 col-lg-3">
 				<table class="table-hover">
 					<thead>
 						<tr>
@@ -211,39 +211,41 @@
 	<div id="draft-body" class="my-5 mx-auto hidden row">
 
 		<section class="col-12 col-lg-3 p-3" style="height: 70vh; overflow: auto;">
-			<h2 class="text-center">Draftable Players</h2>
-			<table id="draftable-players-table" class="table table-hover table-sm">
-				<tbody>
-					{% set counter = [0] %}
-					{% for player in players %}
-						{% if player.custom_tier > counter|last %}
-							<tr class="tier-row">
-								<td></td><td>Tier {{ player.custom_tier }}</td><td></td><td></td>
+			<div class="table-responsive">
+				<h2 class="text-center">Draftable Players</h2>
+				<table id="draftable-players-table" class="table table-hover table-sm">
+					<tbody>
+						{% set counter = [0] %}
+						{% for player in players %}
+							{% if player.custom_tier > counter|last %}
+								<tr class="tier-row">
+									<td></td><td>Tier {{ player.custom_tier }}</td><td></td><td></td>
+								</tr>
+							{% endif %}
+							{% if counter.append(player.custom_tier) %}
+							{% endif %}
+							<tr class="player-row" id="{{ player[0].id }}-row">
+								<td class="font-weight-bolder">{{ player.custom_rank }}.</td>
+								<td>
+									<div>
+										<p class="text-left m-0 p-0 font-weight-bolder name">{{ player[0].name }}</p>
+										<p class="text-left m-0 p-0 pos" style="font-size: 9pt;">{{ player[0].position }}, {{ player[0].team }}</p>
+									</div>
+								</td>
+								<td class="text-center options-col">
+									<button class="btn btn-outline-primary btn-sm draft-btn hidden" value="{{ player[0].id }}">Draft</button>
+								</td>
+								<td>{{ player[0].rank }}</td>
 							</tr>
-						{% endif %}
-						{% if counter.append(player.custom_tier) %}
-						{% endif %}
-						<tr class="player-row" id="{{ player[0].id }}-row">
-							<td class="font-weight-bolder">{{ player.custom_rank }}.</td>
-							<td>
-								<div>
-									<p class="text-left m-0 p-0 font-weight-bolder name">{{ player[0].name }}</p>
-									<p class="text-left m-0 p-0 pos" style="font-size: 9pt;">{{ player[0].position }}, {{ player[0].team }}</p>
-								</div>
-							</td>
-							<td class="text-center options-col">
-								<button class="btn btn-outline-primary btn-sm draft-btn hidden" value="{{ player[0].id }}">Draft</button>
-							</td>
-							<td>{{ player[0].rank }}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
 		</section>
 
-		<div class="col-12 col-lg-8 m-0 p-0">
+		<section class="col-12 col-lg-9">
 			<h2 class="text-center">Draft Board</h2>
-			<div id="draft-board-wrapper">
+			<div id="draft-board-wrapper" class="p-3">
 				<table id="draft-board" class="table">
 					<thead>
 						<tr class="row">
@@ -254,7 +256,7 @@
 					</tbody>
 				</table>
 			</div>
-		</div>
+		</section>
 
 	</div>
 </div>
@@ -349,10 +351,6 @@
 
 	#draftable-players-table tbody {
 		overflow: auto;
-	}
-
-	tbody, thead {
-		display: block;
 	}
 
 	#draft-board-wrapper {
