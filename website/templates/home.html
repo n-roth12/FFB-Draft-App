@@ -14,37 +14,39 @@
       <div class="product-device box-shadow d-none d-md-block"></div>
       <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
   </div>
-  <div class="container content-wrapper mb-5"> 
-    <div>
-      <h2 class="text-center">Expert Concensus Draft Rankings</h2>
-    </div>
-    <div class="overflow-auto table-responsive rounded" style="max-width: 100vw;">
-      <table class="table table-hover table-dark table-striped rounded" style="background-color: #1D2228; color:white;">
-        <thead>
-            <tr>
-                <th scope="col" class="text-center">Rank</th>
-                <th scope="col" class="text-center">Name</th>
-                <th scope="col" class="text-center">Position</th>
-                <th scope="col" class="text-center">Team</th>
-                <th scope="col" class="text-center">Fantasy Pros</th>
-                <th scope="col" class="text-center">FFB Calculator</th>
-                <th scope="col" class="text-center">Sporting News</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for player in players %} 
-                <tr>
-                    <td class="text-center">{{ player.rank }}</td>
-                    <td class="text-center">{{ player.name }}</td>
-                    <td class="text-center">{{ player.position }} {{ player.position_rank }}</td>
-                    <td class="text-center">{{ player.team }}</td>
-                    <td class="text-center">{{ player.fp_rank }}</td>
-                    <td class="text-center">{{ player.ffb_calc_rank }}</td>
-                    <td class="text-center">{{ player.sport_news_rank }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-      </table>
+  <div class="px-3">
+    <div class="container content-wrapper mb-5"> 
+      <div>
+        <h2 class="text-center">Expert Concensus Draft Rankings</h2>
+      </div>
+      <div class="overflow-auto table-responsive rounded">
+        <table class="table table-hover table-dark table-striped rounded data-table">
+          <thead>
+              <tr>
+                  <th scope="col" class="text-center">Rank</th>
+                  <th scope="col" class="text-center">Name</th>
+                  <th scope="col" class="text-center">Position</th>
+                  <th scope="col" class="text-center">Team</th>
+                  <th scope="col" class="text-center">Fantasy Pros</th>
+                  <th scope="col" class="text-center">FFB Calculator</th>
+                  <th scope="col" class="text-center">Sporting News</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for player in players %} 
+                  <tr>
+                      <td class="text-center">{{ player.rank }}</td>
+                      <td class="text-center">{{ player.name }}</td>
+                      <td class="text-center">{{ player.position }} {{ player.position_rank }}</td>
+                      <td class="text-center">{{ player.team }}</td>
+                      <td class="text-center">{{ player.fp_rank }}</td>
+                      <td class="text-center">{{ player.ffb_calc_rank }}</td>
+                      <td class="text-center">{{ player.sport_news_rank }}</td>
+                  </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 

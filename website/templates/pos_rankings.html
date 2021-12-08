@@ -10,57 +10,71 @@
 	       <h1 class="display-4 font-weight-normal" style="color: white">Your Custom {{ position }} Rankings</h1>
 	   </div>
 	</div>
-	<div class="container">
-		<div class="row">
-			<div class="col text-center">
-				<p>
-					Select "Change" to adjust the ranking of a specific {{ position }}. 
+	<div class="px-3">
+		<div class="container content-wrapper">
+			<div class="row">
+				<div class="col text-center">
+					<p style="font-size: 14pt;">
+						Select "Change" to adjust the ranking of a specific {{ position }}. 
+					</p>
+				</div>
+			</div>
+			<div class="text-center row">
+				<p style="font-size: 14pt;
+				"class="col">Filter By Position: <a href="{{ url_for('rankings_page') }}">All</a> | <a href="{{ url_for('pos_rankings_page', pos='QB') }}">QB</a> | <a href="{{ url_for('pos_rankings_page', pos='RB') }}">RB</a> | <a href="{{ url_for('pos_rankings_page', pos='WR') }}">WR</a> | <a href="{{ url_for('pos_rankings_page', pos='TE') }}">TE</a> 
 				</p>
 			</div>
-		</div>
-		<div class="text-center row">
-			<p style=""class="col">Filter By Position: <a href="{{ url_for('rankings_page') }}">All</a> | <a href="{{ url_for('pos_rankings_page', pos='QB') }}">QB</a> | <a href="{{ url_for('pos_rankings_page', pos='RB') }}">RB</a> | <a href="{{ url_for('pos_rankings_page', pos='WR') }}">WR</a> | <a href="{{ url_for('pos_rankings_page', pos='TE') }}">TE</a> 
-			</p>
-		</div>
-		<br>
-		<table class="table table-hover table-striped table-dark table-sm" style="background-color: #1D2228">
-			<thead>
-				<tr>
-					<th scope="col" class="text-center">{{ position }} Rank</th>
-					<th scope="col" class="text-center">Name</th>
-					<th scope="col" class="text-center">Team</th>
-					<th scope="col" class="text-center">ECR</th>
-					<th scope="col" class="text-center">Fantasy Pros</th>
-					<th scope="col" class="text-center">FFB Calculator</th>
-					<th scope="col" class="text-center">Sporting News</th>
-					<th scope="col" class="text-center"></th>
-				</tr>
-			</thead>
-			<tbody>
-				{% set tiers = [] %}
-				{% for player in players %}
-				{% include 'includes/pos_player_modals.html' %}
-					{% if tiers|length < 1 or player.custom_tier != tiers[-1] %}
-						{% do tiers.append(player.custom_tier) %}
+			<br>
+			<div class="overflow-auto table-responsive rounded">
+				<table class="table table-hover table-striped table-dark table-sm data-table">
+					<thead>
 						<tr>
-							<td class="bg-secondary">Tier {{ player.custom_tier }}</td>
+							<th scope="col" class="text-center"></th>
+							<th scope="col" class="text-center">{{ position }} Rank</th>
+							<th scope="col" class="text-center">Name</th>
+							<th scope="col" class="text-center">Team</th>
+							<th scope="col" class="text-center">ECR</th>
+							<th scope="col" class="text-center">Fantasy Pros</th>
+							<th scope="col" class="text-center">FFB Calculator</th>
+							<th scope="col" class="text-center">Sporting News</th>
 						</tr>
-					{% endif %}
-					<tr class="player-row" id="{{ player.id }}-row">
-						<td class="text-center custom-rank" form="player-form">{{ player.custom_pos_rank }}</td>
-						<td class="text-center">{{ player[0].name }}</td>
-						<td class="text-center">{{ player[0].team }}</td>
-						<td class="text-center">{{ player[0].rank }}</td>
-						<td class="text-center">{{ player[0].fp_rank }}</td>
-						<td class="text-center">{{ player[0].ffb_calc_rank }}</td>
-						<td class="text-center">{{ player[0].sport_news_rank }}</td>
-						<td class="text-center">
-								<button class="btn btn-outline btn-outline-warning btn-sm" data-toggle="modal" data-target="#Modal-SwapPosRank-{{ player[0].id }}">Move</button>
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+					</thead>
+					<tbody>
+						{% set tiers = [] %}
+						{% for player in players %}
+						{% include 'includes/pos_player_modals.html' %}
+							{% if tiers|length < 1 or player.custom_tier != tiers[-1] %}
+								{% do tiers.append(player.custom_tier) %}
+								<tr>
+									<td class="bg-secondary tier-row pl-5" colspan="12">Tier {{ player.custom_tier }}
+										{% if player.custom_tier > 1 %}
+											<button class="btn btn-outline-warning btn-sm"
+												data-toggle="modal"
+												data-target="#Modal-EditTier-{{ player.custom_tier }}">Edit</button>
+										{% endif %}
+									</td>
+								</tr>
+
+							{% endif %}
+							<tr class="player-row" id="{{ player.id }}-row">
+								<td class="text-center">
+										<button class="btn btn-outline btn-outline-warning btn-sm" 
+										data-toggle="modal" 
+										data-target="#Modal-SwapPosRank-{{ player[0].id }}">Move</button>
+								</td>
+								<td class="text-center custom-rank" form="player-form">{{ player.custom_pos_rank }}</td>
+								<td class="text-center">{{ player[0].name }}</td>
+								<td class="text-center">{{ player[0].team }}</td>
+								<td class="text-center">{{ player[0].rank }}</td>
+								<td class="text-center">{{ player[0].fp_rank }}</td>
+								<td class="text-center">{{ player[0].ffb_calc_rank }}</td>
+								<td class="text-center">{{ player[0].sport_news_rank }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 
 {% endblock %}
